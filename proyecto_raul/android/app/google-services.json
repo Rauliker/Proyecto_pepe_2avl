@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "588633609674",
-    "project_id": "proyecto-final-raul",
-    "storage_bucket": "proyecto-final-raul.firebasestorage.app"
+    "project_number": "576410828598",
+    "project_id": "proyecto-final-pepe",
+    "storage_bucket": "proyecto-final-pepe.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:588633609674:android:adc1a58982d00a8b786b33",
+        "mobilesdk_app_id": "1:576410828598:android:57c55fce4b79796a5f3d97",
         "android_client_info": {
-          "package_name": "com.proyecto_raul.app"
+          "package_name": "com.raul.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDkuieWuZBixwASr3DYvi1bwTpvH_J_z_4"
+          "current_key": "AIzaSyC7m4QZr9yAwrqk5_KI51weZQTETKpHoic"
         }
       ],
       "services": {
