@@ -34,7 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       try {
         final user = await createUser(event.email, event.password,
             event.username, event.idprovincia, event.idmunicipio, event.calle);
-        emit(UserLoaded(user));
+        emit(SignupSuccess(user));
       } catch (e) {
         emit(UserError(message: e.toString()));
       }

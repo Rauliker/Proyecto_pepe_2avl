@@ -6,7 +6,7 @@ import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/screens/login_screen.dart';
 import 'package:proyecto_raul/presentations/screens/singin_screen.dart';
 import 'package:proyecto_raul/presentations/screens/spalsh_screen.dart';
-import 'package:proyecto_raul/presentations/screens/user_screen.dart';
+import 'package:proyecto_raul/presentations/screens/user_default_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GoRouter router = GoRouter(
@@ -41,6 +41,12 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
         path: '/home',
+        builder: (context, state) => BlocProvider(
+              create: (context) => di.sl<UserBloc>(),
+              child: const HomeScreen(),
+            )),
+    GoRoute(
+        path: '/user',
         builder: (context, state) => BlocProvider(
               create: (context) => di.sl<UserBloc>(),
               child: const HomeScreen(),

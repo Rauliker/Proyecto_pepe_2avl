@@ -29,9 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.8
-  dartz: ^0.10.1
-  device_preview: ^1.2.0
-  equatable: ^2.0.5
+  equatable: ^2.0.7
   firebase_auth: ^5.3.4
   firebase_core: ^3.8.1
   flutter:
@@ -39,22 +37,42 @@ dependencies:
   flutter_bloc: ^8.1.6
   flutter_dotenv: ^5.2.1
   flutter_launcher_icons: ^0.14.2
-  flutter_native_splash: ^2.4.2
-  get_it: ^8.0.1
-  go_router: ^14.3.0
+  get_it: ^8.0.3
+  go_router: ^14.6.2
   http: ^1.2.2
-  intl: ^0.19.0
-  modal_bottom_sheet: ^3.0.0
-  path_provider: ^2.0.14
-  pub_updater: ^0.5.0
-  shared_preferences: ^2.3.2
+  intl: ^0.20.1
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.14.1
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
 
+flutter_launcher_icons:
+  image_path: "assets/splash_screen.png"
+  android:
+    generate: true
+    image_path: "assets/splash_screen.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/splash_screen.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/splash_screen.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/splash_screen.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -65,28 +83,9 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/splash_screen.png
     - assets/splash_screen.ico
-
-# flutter_native_splash:
-#   color: "#000000"
-#   image: assets/splash_screen.png
-#   android: true
-#   ios: true
-#   web: true
-#   windows: true
-#   macos: true
-#   fullscreen: true
-
-flutter_icons:
-  color: "#000000"
-  android: true
-  ios: true
-  web: true
-  linux: true
-  windows: true
-  macos: true
-  image_path: "assets/splash_screen.ico"
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

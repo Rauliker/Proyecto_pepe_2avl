@@ -176,7 +176,10 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                             calle: calle,
                           ));
                     },
-                    child: const Text('Crear Usuario'),
+                    child: Text(
+                      'Crear Usuario',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {

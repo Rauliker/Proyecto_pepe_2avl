@@ -11,7 +11,7 @@ import 'injection_container.dart' as injection_container;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Future.delayed(Duration(seconds: 3));
+  await Future.delayed(const Duration(seconds: 3));
   await dotenv.load(fileName: ".env");
 
   await injection_container.init();
