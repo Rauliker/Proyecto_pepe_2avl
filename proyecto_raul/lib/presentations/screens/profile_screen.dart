@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/domain/entities/provincias.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
@@ -11,32 +11,54 @@ import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
 import 'package:proyecto_raul/presentations/widgets/dialog/error_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CrearUsuarioPage extends StatefulWidget {
-  const CrearUsuarioPage({super.key});
+final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<CrearUsuarioPage> createState() => _CrearUsuarioPageState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _calleController = TextEditingController();
-  List<PlatformFile> _imagenes = [];
 
   int? _selectedProvincia;
   int? _selectedMunicipio;
   late List<Prov> _provinciasConMunicipios;
+  String _avatarUrl = ''; // URL del avatar
+  List<PlatformFile> _imagenes = []; // Para almacenar imágenes seleccionadas
 
   @override
   void initState() {
     super.initState();
     context.read<ProvBloc>().add(const ProvDataRequest());
     _provinciasConMunicipios = [];
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email');
+    if (email != null) {
+      context.read<UserBloc>().add(UserDataRequest(email: email));
+    }
+  }
+
+  void _loadUserData(UserLoaded state) {
+    _emailController.text = state.user.email;
+    _usernameController.text = state.user.username;
+    _selectedProvincia = state.user.provincia.idProvincia;
+    _selectedMunicipio = state.user.localidad.idLocalidad;
+    _calleController.text = state.user.calle;
+    _avatarUrl = state.user.avatar;
   }
 
   Future<void> _pickImages() async {
@@ -57,54 +79,41 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
   }
 
   void _submitForm() {
-    if (_passwordController.text.isEmpty ||
-        _passwordController.text.length < 6 ||
-        _passwordController.text != _repeatPasswordController.text ||
-        _selectedProvincia == null ||
-        _selectedMunicipio == null) {
-      String errorMessage = '';
-      if (_passwordController.text.isEmpty ||
-          _selectedProvincia == null ||
-          _selectedMunicipio == null) {
-        errorMessage = 'Por favor complete todos los campos.';
-      } else if (_passwordController.text.length < 6) {
-        errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
-      } else if (_passwordController.text != _repeatPasswordController.text) {
-        errorMessage = 'Las contraseñas no coinciden.';
-      }
-      ErrorDialog.show(context, errorMessage);
+    if (_passwordController.text.isNotEmpty &&
+        _passwordController.text.length < 6) {
+      ErrorDialog.show(
+          context, 'La contraseña debe tener al menos 6 caracteres.');
       return;
     }
 
     context.read<UserBloc>().add(
-          UserCreateRequest(
-              email: _emailController.text,
-              password: _passwordController.text,
-              username: _usernameController.text,
-              imagen: _imagenes,
-              idprovincia: _selectedProvincia!,
-              idmunicipio: _selectedMunicipio!,
-              calle: _calleController.text),
+          UserUpdateProfile(
+            email: _emailController.text,
+            username: _usernameController.text,
+            idprovincia: _selectedProvincia!,
+            idmunicipio: _selectedMunicipio!,
+            calle: _calleController.text,
+            // images: _imagenes.isNotEmpty ? _imagenes : null,
+          ),
         );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear Usuario')),
+      appBar: AppBar(title: const Text('Editar Perfil')),
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(listener: (context, userState) {
             if (userState is SignupSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content:
-                      Text('Usuario creado con éxito: ${userState.user.email}'),
-                ),
+                const SnackBar(content: Text('Perfil actualizado con éxito')),
               );
-              context.go('/login');
-            } else if (userState is SignupFailure) {
+              context.go('/home');
+            } else if (userState is UserError) {
               ErrorDialog.show(context, userState.message);
+            } else if (userState is UserLoaded) {
+              _loadUserData(userState);
             }
           }),
           BlocListener<ProvBloc, ProvState>(listener: (context, provState) {
@@ -122,24 +131,29 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: _imagenes.isNotEmpty
+                      ? MemoryImage(_imagenes[0].bytes!)
+                      : _avatarUrl.isNotEmpty
+                          ? NetworkImage("$_baseUrl$_avatarUrl")
+                          : null,
+                  child: _avatarUrl.isEmpty && _imagenes.isEmpty
+                      ? const Icon(Icons.person, size: 40)
+                      : null,
+                ),
+                TextButton(
+                  onPressed: _pickImages,
+                  child: const Text('Cambiar Avatar'),
+                ),
                 TextField(
                   controller: _emailController,
                   decoration: const InputDecoration(labelText: 'Email'),
+                  enabled: false,
                 ),
                 TextField(
                   controller: _usernameController,
                   decoration: const InputDecoration(labelText: 'Username'),
-                ),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                ),
-                TextField(
-                  controller: _repeatPasswordController,
-                  obscureText: true,
-                  decoration:
-                      const InputDecoration(labelText: 'Repetir Password'),
                 ),
                 DropdownButtonFormField<int>(
                   value: _selectedProvincia,
@@ -153,7 +167,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   onChanged: (provinciaId) {
                     setState(() {
                       _selectedProvincia = provinciaId;
-                      _selectedMunicipio = null;
+                      _selectedMunicipio =
+                          null; // Reset municipio cuando cambia provincia
                     });
                   },
                 ),
@@ -188,34 +203,17 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _pickImages,
-                  child: Text(
-                    'Seleccionar Imágenes',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 8.0,
-                  children: _imagenes.map((file) {
-                    return kIsWeb
-                        ? Image.memory(file.bytes!,
-                            height: 50, width: 50, fit: BoxFit.cover)
-                        : Text(file.name);
-                  }).toList(),
-                ),
-                ElevatedButton(
                   onPressed: _submitForm,
                   child: Text(
-                    'Crear Usuario',
+                    'Guardar Cambios',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
                 TextButton(
                   onPressed: () {
-                    context.go('/login');
+                    context.go('/home');
                   },
-                  child: const Text('Si ya tienes una cuenta, inicia sesión'),
+                  child: const Text('Cancelar'),
                 ),
               ],
             ),
@@ -228,9 +226,9 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
   @override
   void dispose() {
     _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     _repeatPasswordController.dispose();
-    _usernameController.dispose();
     _calleController.dispose();
     super.dispose();
   }

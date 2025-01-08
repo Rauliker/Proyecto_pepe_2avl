@@ -7,8 +7,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final CaseUser loginUser;
   final CaseUserInfo userInfo;
   final CreateUser createUser;
+  final CaseUsersInfo userOtherInfo;
+  final CaseUseUserUpdateProfile updateUserProfile;
+  final CaseUserUpdatePass updateUserPrass;
 
-  UserBloc(this.loginUser, this.userInfo, this.createUser)
+  UserBloc(this.loginUser, this.userInfo, this.createUser, this.userOtherInfo,
+      this.updateUserProfile, this.updateUserPrass)
       : super(UserInitial()) {
     on<LoginRequested>((event, emit) async {
       emit(LoginLoading());
@@ -32,8 +36,47 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserCreateRequest>((event, emit) async {
       emit(UserLoading());
       try {
-        final user = await createUser(event.email, event.password,
-            event.username, event.idprovincia, event.idmunicipio, event.calle);
+        final user = await createUser(
+            event.email,
+            event.password,
+            event.username,
+            event.idprovincia,
+            event.idmunicipio,
+            event.calle,
+            event.imagen);
+        emit(SignupSuccess(user));
+      } catch (e) {
+        emit(UserError(message: e.toString()));
+      }
+    });
+    on<UserOtherDataRequest>((event, emit) async {
+      emit(UserOtherLoading());
+      try {
+        final user = await userOtherInfo(event.email);
+        emit(UserOtherLoaded(user));
+      } catch (e) {
+        emit(UserOtherError(message: e.toString()));
+      }
+    });
+    on<UserUpdateProfile>((event, emit) async {
+      emit(UserLoading());
+      try {
+        final user = await updateUserProfile(
+          event.email,
+          event.username,
+          event.idprovincia,
+          event.idmunicipio,
+          event.calle, /*event.imagen */
+        );
+        emit(SignupSuccess(user));
+      } catch (e) {
+        emit(UserError(message: e.toString()));
+      }
+    });
+    on<UserUpdatePass>((event, emit) async {
+      emit(UserLoading());
+      try {
+        final user = await updateUserPrass(event.password);
         emit(SignupSuccess(user));
       } catch (e) {
         emit(UserError(message: e.toString()));

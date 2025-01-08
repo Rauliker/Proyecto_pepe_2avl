@@ -30,11 +30,12 @@ class _LoginPageState extends State<LoginPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.user.email)),
             );
-            if (state.user.role == 2) {
-              context.go('/user');
-            } else {
-              context.go('/home');
-            }
+            context.go('/home');
+            // if (state.user.role == 2) {
+            //   context.go('/user');
+            // } else {
+            //   context.go('/home');
+            // }
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),

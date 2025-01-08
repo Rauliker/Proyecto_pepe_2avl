@@ -80,3 +80,30 @@ class UserError extends UserState {
   @override
   List<Object?> get props => [message];
 }
+
+// Estado inicial
+class UserOtherInitial extends UserState {}
+
+// Estado cargando
+class UserOtherLoading extends UserState {}
+
+// Estado cargado
+class UserOtherLoaded extends UserState {
+  final List<User> users; // Cambiado a lista si es necesario
+
+  const UserOtherLoaded(this.users);
+
+  @override
+  List<Object?> get props => [users];
+}
+
+// Estado de error
+class UserOtherError extends UserState {
+  final String message;
+
+  const UserOtherError(
+      {this.message = "Error desconocido al cargar Userincias."});
+
+  @override
+  List<Object?> get props => [message];
+}

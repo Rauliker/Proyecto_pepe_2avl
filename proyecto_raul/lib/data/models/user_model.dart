@@ -5,14 +5,15 @@ class UserModel extends User {
     required super.email,
     required super.username,
     required super.password,
+    required super.avatar,
     required super.role,
     required super.banned,
     super.balance,
     required super.calle,
     required super.provincia,
     required super.localidad,
-    super.createdPujas,
-    super.pujaBids,
+    // super.createdPujas,
+    // super.pujaBids,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -21,6 +22,7 @@ class UserModel extends User {
       username: json['username'] ?? '',
       password: json['password'] ?? '',
       role: json['role'] ?? 2,
+      avatar: json['avatar'],
       banned: json['banned'] ?? false,
       balance: double.tryParse(json['balance']),
       calle: json['calle'] ?? '',
@@ -32,14 +34,14 @@ class UserModel extends User {
         idLocalidad: json['localidad']?['id_localidad'] ?? 0,
         nombre: json['localidad']?['nombre'] ?? '',
       ),
-      createdPujas: (json['createdPujas'] as List<dynamic>?)
-              ?.map((puja) => Puja.fromJson(puja))
-              .toList() ??
-          [],
-      pujaBids: (json['pujaBids'] as List<dynamic>?)
-              ?.map((bid) => PujaBid.fromJson(bid))
-              .toList() ??
-          [],
+      // createdPujas: (json['createdPujas'] as List<dynamic>?)
+      //         ?.map((puja) => Puja.fromJson(puja))
+      //         .toList() ??
+      //     [],
+      // pujaBids: (json['pujaBids'] as List<dynamic>?)
+      //         ?.map((bid) => PujaBid.fromJson(bid))
+      //         .toList() ??
+      //     [],
     );
   }
 
@@ -48,6 +50,7 @@ class UserModel extends User {
       'email': email,
       'username': username,
       'password': password,
+      'avatar': avatar,
       'role': role,
       'banned': banned,
       'balance': balance,
@@ -60,8 +63,8 @@ class UserModel extends User {
         'id_localidad': localidad.idLocalidad,
         'nombre': localidad.nombre,
       },
-      'createdPujas': createdPujas?.map((puja) => puja.toJson()).toList(),
-      'pujaBids': pujaBids?.map((bid) => bid.toJson()).toList(),
+      // 'createdPujas': createdPujas?.map((puja) => puja.toJson()).toList(),
+      // 'pujaBids': pujaBids?.map((bid) => bid.toJson()).toList(),
     };
   }
 }

@@ -3,25 +3,27 @@ class User {
   final String username;
   final String password;
   final int role;
+  final String avatar;
   final bool banned;
   final double? balance;
   final String calle;
   final Provincia provincia;
   final Localidad localidad;
-  final List<Puja>? createdPujas;
-  final List<PujaBid>? pujaBids;
+  // final List<Puja>? createdPujas;
+  // final List<PujaBid>? pujaBids;
 
   User(
       {required this.email,
       required this.username,
       required this.password,
+      required this.avatar,
       required this.role,
       required this.banned,
       required this.balance,
       required this.provincia,
       required this.localidad,
-      required this.createdPujas,
-      required this.pujaBids,
+      // required this.createdPujas,
+      // required this.pujaBids,
       required this.calle});
 }
 

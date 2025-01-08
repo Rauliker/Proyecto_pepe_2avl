@@ -2,11 +2,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/injection_container.dart' as di;
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
+import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
+import 'package:proyecto_raul/presentations/screens/change_password.dart';
+import 'package:proyecto_raul/presentations/screens/crear_sub_form.dart';
+import 'package:proyecto_raul/presentations/screens/edit_sub_form.dart';
 import 'package:proyecto_raul/presentations/screens/login_screen.dart';
+import 'package:proyecto_raul/presentations/screens/my_subastas.dart';
+import 'package:proyecto_raul/presentations/screens/profile_screen.dart';
+import 'package:proyecto_raul/presentations/screens/settings_scrren.dart';
 import 'package:proyecto_raul/presentations/screens/singin_screen.dart';
 import 'package:proyecto_raul/presentations/screens/spalsh_screen.dart';
-import 'package:proyecto_raul/presentations/screens/user_default_screen.dart';
+import 'package:proyecto_raul/presentations/screens/user_subastas.dart';
+import 'package:proyecto_raul/presentations/screens/view_sub.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GoRouter router = GoRouter(
@@ -40,29 +48,134 @@ final GoRouter router = GoRouter(
       ),
     ),
     GoRoute(
-        path: '/home',
-        builder: (context, state) => BlocProvider(
-              create: (context) => di.sl<UserBloc>(),
-              child: const HomeScreen(),
-            )),
+      path: '/home',
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => di.sl<UserBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => di.sl<SubastasBloc>(),
+          ),
+        ],
+        child: const HomeScreen(),
+      ),
+    ),
     GoRoute(
-        path: '/user',
-        builder: (context, state) => BlocProvider(
+      path: '/my_sub',
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => di.sl<UserBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => di.sl<SubastasBloc>(),
+          ),
+        ],
+        child: const MySubsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/create',
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => di.sl<UserBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => di.sl<SubastasBloc>(),
+          ),
+        ],
+        child: const SubForm(),
+      ),
+    ),
+    GoRoute(
+      path: '/edit/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id'];
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
               create: (context) => di.sl<UserBloc>(),
-              child: const HomeScreen(),
-            )),
+            ),
+            BlocProvider(
+              create: (context) => di.sl<SubastasBloc>(),
+            ),
+          ],
+          child: SubEditForm(idSubasta: int.parse(id!)),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/subastas/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id'];
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => di.sl<UserBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => di.sl<SubastasBloc>(),
+            ),
+          ],
+          child: ViewSubInfo(idSubasta: int.parse(id!)),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/user',
+      builder: (context, state) => BlocProvider(
+        create: (context) => di.sl<UserBloc>(),
+        child: const HomeScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => di.sl<UserBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => di.sl<ProvBloc>(),
+          ),
+        ],
+        child: const ProfileScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => BlocProvider(
+        create: (context) => di.sl<UserBloc>(),
+        child: const SettingsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/change-password',
+      builder: (context, state) => BlocProvider(
+        create: (context) => di.sl<UserBloc>(),
+        child: const ChangePassScreen(),
+      ),
+    ),
   ],
   redirect: (context, state) async {
-    // Verificar si el email está almacenado en SharedPreferences.
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
 
-    // Si el email existe, redirigir a /home. Si no, a /login.
     if (email != null && email.isNotEmpty) {
-      return '/home';
+      if (state.matchedLocation == '/login' ||
+          state.matchedLocation == '/signup') {
+        return '/home';
+      }
+      return null;
     }
 
-    // Si no está logueado, redirigir a /login.
+    if (state.matchedLocation != '/login' &&
+        state.matchedLocation != '/signup') {
+      return '/login';
+    }
+
     return null;
   },
 );
