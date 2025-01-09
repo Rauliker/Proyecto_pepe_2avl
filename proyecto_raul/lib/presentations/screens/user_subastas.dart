@@ -252,8 +252,7 @@ class HomeScreenState extends State<HomeScreen> {
   void _checkBidEligibility(DateTime fechaFin, int id) {
     DateTime now = DateTime.now();
     if (now.isBefore(fechaFin)) {
-      print('Hola');
-      context.go('/subastas/$id');
+      context.push('/subastas/$id');
     }
   }
 

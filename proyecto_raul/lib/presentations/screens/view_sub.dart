@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
@@ -22,6 +21,7 @@ class ViewSubInfo extends StatefulWidget {
 class ViewSubInfoState extends State<ViewSubInfo> {
   late String baseUrl;
   late int currentImageIndex;
+  late double pujaActual;
   late TextEditingController pujaController;
 
   @override
@@ -37,22 +37,25 @@ class ViewSubInfoState extends State<ViewSubInfo> {
     String puja = pujaController.text;
     if (puja.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      final email = prefs.getString('email');
+      if (double.parse(puja) > pujaActual) {
+        final email = prefs.getString('email');
 
-      if (email != null) {
-        context.read<SubastasBloc>().add(CreateSubastaPujaEvent(
-              idPuja: widget.idSubasta,
-              email: email,
-              puja: puja,
-            ));
-        // Limpiar el controlador de texto
-        pujaController.clear();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Puja realizada con éxito')),
-        );
+        if (email != null) {
+          context.read<SubastasBloc>().add(CreateSubastaPujaEvent(
+                idPuja: widget.idSubasta,
+                email: email,
+                puja: puja,
+              ));
+          // Limpiar el controlador de texto
+          pujaController.clear();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No se encontró el email.')),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No se encontró el email.')),
+          const SnackBar(content: Text('La puja debe ser mayor a la actual.')),
         );
       }
     } else {
@@ -70,8 +73,7 @@ class ViewSubInfoState extends State<ViewSubInfo> {
           builder: (context, state) {
             if (state is SubastasLoadedStateId) {
               return Text(state.subastas.nombre);
-            } else if (state is SubastasErrorState ||
-                state is SubastasPujaErrorState) {
+            } else if (state is SubastasErrorState) {
               return const Text("Error");
             }
             return const Text('Cargando...');
@@ -83,13 +85,27 @@ class ViewSubInfoState extends State<ViewSubInfo> {
         child: BlocListener<SubastasBloc, SubastasState>(
           listener: (context, state) {
             if (state is SubastaCreatedPujaState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Puja realizada con éxito')),
+              );
               // Redirigir a la página de subastas después de crear la puja
-              context.go('/home');
+              context
+                  .read<SubastasBloc>()
+                  .add(FetchSubastasPorIdEvent(widget.idSubasta));
+            } else if (state is SubastasPujaErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('No tienes saldo suficiente')),
+              );
+
+              context
+                  .read<SubastasBloc>()
+                  .add(FetchSubastasPorIdEvent(widget.idSubasta));
             }
           },
           child: BlocBuilder<SubastasBloc, SubastasState>(
             builder: (context, state) {
               if (state is SubastasLoadedStateId) {
+                pujaActual = state.subastas.pujaActual;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -176,15 +192,6 @@ class ViewSubInfoState extends State<ViewSubInfo> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24.0, vertical: 12.0),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () => context.go('/home'),
-                        child: Text(
-                          'Atras',
-                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                     ),
