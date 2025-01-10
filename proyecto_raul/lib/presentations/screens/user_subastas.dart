@@ -7,6 +7,7 @@ import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
+import 'package:proyecto_raul/presentations/funcionalities/logout.dart';
 import 'package:proyecto_raul/presentations/widgets/filter_drawer.dart';
 import 'package:proyecto_raul/presentations/widgets/sort_drawer.dart';
 import 'package:proyecto_raul/presentations/widgets/subastas_card.dart';
@@ -38,6 +39,35 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     _fetchUserData();
     _fetchSubastas();
+  }
+
+  Future<void> _showLogoutConfirmationDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar'),
+          content: const Text('¿Seguro que quieres cerrar sesión?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('Cerrar sesión'),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      await logout(context);
+    }
   }
 
   Future<void> _fetchUserData() async {
@@ -159,6 +189,66 @@ class HomeScreenState extends State<HomeScreen> {
             child: const Icon(Icons.sort),
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Menú',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  BlocBuilder<UserBloc, UserState>(
+                    builder: (context, state) {
+                      if (state is UserLoaded) {
+                        return Text(
+                          'Hola, ${state.user.username}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text('Perfil'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/profile');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Configuración'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/settings');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
+              onTap: _showLogoutConfirmationDialog,
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: InkWell(

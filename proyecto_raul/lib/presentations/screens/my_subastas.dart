@@ -9,6 +9,7 @@ import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
+import 'package:proyecto_raul/presentations/funcionalities/logout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MySubsScreen extends StatefulWidget {
@@ -34,12 +35,6 @@ class MySubsScreenState extends State<MySubsScreen> {
     if (now.isBefore(fechaFin)) {
       context.go('/edit/$id');
     }
-  }
-
-  Future<void> _logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('email');
-    context.go('/login');
   }
 
   Future<void> _showLogoutConfirmationDialog() async {
@@ -68,7 +63,7 @@ class MySubsScreenState extends State<MySubsScreen> {
     );
 
     if (result == true) {
-      await _logout();
+      await logout(context);
     }
   }
 
