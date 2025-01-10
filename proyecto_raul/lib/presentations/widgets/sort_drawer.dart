@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-typedef SortCallback = void Function(bool isPriceSort, bool isAscending);
-
 void showSortDrawer(
-    BuildContext context, SortCallback onSortApplied, bool price, bool date) {
+    BuildContext context,
+    void Function(bool isPriceSort, bool isAscending) onSortApplied,
+    bool price,
+    bool date) {
   bool isPriceSort = true;
   bool isAscending = true;
 

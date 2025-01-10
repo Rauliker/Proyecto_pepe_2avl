@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
+import 'package:proyecto_raul/presentations/funcionalities/date_format.dart';
 
 class SubastasListWidget extends StatefulWidget {
   final String searchQuery;
@@ -26,13 +27,14 @@ class SubastasListWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SubastasListWidgetState createState() => _SubastasListWidgetState();
+  SubastasListWidgetState createState() => SubastasListWidgetState();
 }
 
-class _SubastasListWidgetState extends State<SubastasListWidget> {
+class SubastasListWidgetState extends State<SubastasListWidget> {
   final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
   bool _isFirstTimeSortedPrice = true;
   bool _isFirstTimeSortedDate = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubastasBloc, SubastasState>(
@@ -93,143 +95,180 @@ class _SubastasListWidgetState extends State<SubastasListWidget> {
             }
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(8.0),
-            itemCount: subastas.length,
-            itemBuilder: (context, index) {
-              final subasta = subastas[index];
-              int currentImageIndex = 0;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Estas son las subastas disponibles: ${subastas.length}',
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: subastas.length,
+                  itemBuilder: (context, index) {
+                    final subasta = subastas[index];
+                    int currentImageIndex = 0;
 
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return Card(
-                    elevation: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: Stack(
-                              children: [
-                                Positioned.fill(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      color: Colors.grey.shade200,
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                            '$_baseUrl${subasta.imagenes[currentImageIndex].url}'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  top: 0,
-                                  bottom: 0,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        currentImageIndex =
-                                            (currentImageIndex > 0)
-                                                ? currentImageIndex - 1
-                                                : subasta.imagenes.length - 1;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      color: Colors.black.withOpacity(0.3),
-                                      child: const Icon(Icons.arrow_back_ios,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  top: 0,
-                                  bottom: 0,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        currentImageIndex = (currentImageIndex <
-                                                subasta.imagenes.length - 1)
-                                            ? currentImageIndex + 1
-                                            : 0;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      color: Colors.black.withOpacity(0.3),
-                                      child: const Icon(Icons.arrow_forward_ios,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Column(
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return Card(
+                          elevation: 4,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  subasta.nombre,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0),
-                                ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  subasta.descripcion,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  'Fecha: ${subasta.fechaFin}',
-                                  style: TextStyle(color: Colors.grey.shade600),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    DateTime now = DateTime.now();
-                                    if (now.isBefore(subasta.fechaFin)) {
-                                      context.push('/subastas/${subasta.id}');
-                                    }
-                                  },
-                                  child: Text(
-                                    DateTime.now().isBefore(subasta.fechaFin)
-                                        ? 'Pujar'
-                                        : 'Finalizada',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: Stack(
+                                    children: [
+                                      Positioned.fill(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            color: Colors.grey.shade200,
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  '$_baseUrl${subasta.imagenes[currentImageIndex].url}'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 0,
+                                        top: 0,
+                                        bottom: 0,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              currentImageIndex =
+                                                  (currentImageIndex > 0)
+                                                      ? currentImageIndex - 1
+                                                      : subasta
+                                                              .imagenes.length -
+                                                          1;
+                                            });
+                                          },
+                                          child: Container(
+                                            width: 30,
+                                            color:
+                                                Colors.black.withOpacity(0.3),
+                                            child: const Icon(
+                                                Icons.arrow_back_ios,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        bottom: 0,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              currentImageIndex =
+                                                  (currentImageIndex <
+                                                          subasta.imagenes
+                                                                  .length -
+                                                              1)
+                                                      ? currentImageIndex + 1
+                                                      : 0;
+                                            });
+                                          },
+                                          child: Container(
+                                            width: 30,
+                                            color:
+                                                Colors.black.withOpacity(0.3),
+                                            child: const Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
+                                const SizedBox(width: 16.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        subasta.nombre,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      Text(
+                                        subasta.descripcion,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      Text(
+                                        DateTime.now()
+                                                .isBefore(subasta.fechaFin)
+                                            ? 'Quedan: ${getTimeRemaining(subasta.fechaFin)}'
+                                            : 'Ganador: ${subasta.pujas?.last.emailUser}',
+                                        style: TextStyle(
+                                            color: Colors.grey.shade600),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          DateTime now = DateTime.now();
+                                          if (now.isBefore(subasta.fechaFin)) {
+                                            context.push(
+                                                '/subastas/${subasta.id}');
+                                          }
+                                        },
+                                        child: Text(
+                                          DateTime.now()
+                                                  .isBefore(subasta.fechaFin)
+                                              ? 'Pujar'
+                                              : 'Finalizada',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${subasta.pujaActual}€',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${subasta.pujaActual}€',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         } else if (state is SubastasErrorState) {
           return Center(

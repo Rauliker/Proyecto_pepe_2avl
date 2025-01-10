@@ -49,7 +49,7 @@ class _SubFormState extends State<SubForm> {
         }
       }
     } catch (e) {
-      print('Error al seleccionar imágenes: $e');
+      // print('Error al seleccionar imágenes: $e');
     }
   }
 
@@ -111,7 +111,7 @@ class _SubFormState extends State<SubForm> {
                     content: Text('Subasta creado con éxito $email'),
                   ),
                 );
-                context.go('/home');
+                context.go('/mysub');
               } else if (subState is SubastasErrorState) {
                 ErrorDialog.show(context, subState.message);
               }

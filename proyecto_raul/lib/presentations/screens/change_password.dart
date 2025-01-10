@@ -45,9 +45,8 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   }
 
   void _submitForm() {
-    if (_passwordController.text.isNotEmpty &&
-        _repeatPasswordController.text.isNotEmpty &&
-        _passwordController.text.length < 6) {
+    if (_passwordController.text.length < 6 ||
+        _repeatPasswordController.text.length < 6) {
       if (_passwordController.text != _repeatPasswordController.text) {
         ErrorDialog.show(context, 'Las contraseñas deben coincidir.');
       } else {

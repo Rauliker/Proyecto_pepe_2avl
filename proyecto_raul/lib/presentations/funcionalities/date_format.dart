@@ -1,7 +1,9 @@
-import 'package:intl/intl.dart';
+String getTimeRemaining(DateTime endDate) {
+  final now = DateTime.now();
+  final difference = endDate.difference(now);
 
-String formatoFecha(String fecha) {
-  final DateTime dateTime = DateTime.parse(fecha);
-  final DateFormat formatter = DateFormat('dd/MM/yyyy');
-  return formatter.format(dateTime);
+  final days = difference.inDays;
+  final hours = difference.inHours % 24;
+
+  return '$days días, $hours horas';
 }

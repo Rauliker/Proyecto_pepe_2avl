@@ -4,10 +4,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
+import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
 import 'package:proyecto_raul/presentations/funcionalities/logout.dart';
+import 'package:proyecto_raul/presentations/widgets/drewers.dart';
 import 'package:proyecto_raul/presentations/widgets/filter_drawer.dart';
 import 'package:proyecto_raul/presentations/widgets/sort_drawer.dart';
 import 'package:proyecto_raul/presentations/widgets/subastas_card.dart';
@@ -30,6 +32,8 @@ class HomeScreenState extends State<HomeScreen> {
   bool _isDateSort = false;
   bool _isPriceSortAscending = true;
   bool _isDateSortAscending = true;
+  double? precioMasAlto;
+  double? precioMasBajo;
 
   bool _isFirstTimeSortedPrice = true;
   bool _isFirstTimeSortedDate = true;
@@ -81,9 +85,24 @@ class HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchSubastas() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
+
     if (email != null) {
       context.read<SubastasBloc>().add(FetchSubastasDeOtroUsuarioEvent(email));
     }
+
+    context.read<SubastasBloc>().stream.listen((state) {
+      if (state is SubastasLoadedState) {
+        final precios =
+            state.subastas.map((subasta) => subasta.pujaActual).toList();
+
+        if (precios.isNotEmpty) {
+          setState(() {
+            precioMasAlto = precios.reduce((a, b) => a > b ? a : b);
+            precioMasBajo = precios.reduce((a, b) => a < b ? a : b);
+          });
+        }
+      }
+    });
   }
 
   void _filterSubastas(String query) {
@@ -177,7 +196,7 @@ class HomeScreenState extends State<HomeScreen> {
                 _minPrice = min;
                 _maxPrice = max;
               });
-            }),
+            }, precioMasBajo, precioMasAlto),
             child: const Icon(Icons.filter_list),
           ),
           const SizedBox(height: 16),
@@ -190,66 +209,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Menú',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  BlocBuilder<UserBloc, UserState>(
-                    builder: (context, state) {
-                      if (state is UserLoaded) {
-                        return Text(
-                          'Hola, ${state.user.username}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.account_circle),
-              title: const Text('Perfil'),
-              onTap: () {
-                Navigator.pop(context);
-                context.go('/profile');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Configuración'),
-              onTap: () {
-                Navigator.pop(context);
-                context.go('/settings');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Cerrar sesión'),
-              onTap: _showLogoutConfirmationDialog,
-            ),
-          ],
-        ),
-      ),
+      drawer: const CustomDrawer(),
       bottomNavigationBar: BottomAppBar(
         child: InkWell(
           onTap: () => context.go('/my_sub'),
