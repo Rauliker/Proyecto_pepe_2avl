@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
+import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
 import 'package:proyecto_raul/presentations/funcionalities/date_format.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubastasListWidget extends StatefulWidget {
   final String searchQuery;
@@ -101,7 +104,7 @@ class SubastasListWidgetState extends State<SubastasListWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Estas son las subastas disponibles: ${subastas.length}',
+                  AppLocalizations.of(context)!.hello_bid(subastas.length),
                   style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -222,24 +225,43 @@ class SubastasListWidgetState extends State<SubastasListWidget> {
                                       Text(
                                         DateTime.now()
                                                 .isBefore(subasta.fechaFin)
-                                            ? 'Quedan: ${getTimeRemaining(subasta.fechaFin)}'
-                                            : 'Ganador: ${subasta.pujas?.last.emailUser}',
+                                            ? AppLocalizations.of(context)!
+                                                .days_left(getTimeRemaining(
+                                                    subasta.fechaFin))
+                                            : AppLocalizations.of(context)!
+                                                .winner(subasta.pujas?.last
+                                                        .emailUser ??
+                                                    ''),
                                         style: TextStyle(
                                             color: Colors.grey.shade600),
                                       ),
                                       ElevatedButton(
-                                        onPressed: () {
+                                        onPressed: () async {
                                           DateTime now = DateTime.now();
                                           if (now.isBefore(subasta.fechaFin)) {
-                                            context.push(
-                                                '/subastas/${subasta.id}');
+                                            final prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            final email =
+                                                prefs.getString('email');
+                                            context
+                                                .push(
+                                              '/subastas/${subasta.id}',
+                                            )
+                                                .then((_) {
+                                              context.read<SubastasBloc>().add(
+                                                  FetchSubastasDeOtroUsuarioEvent(
+                                                      email!));
+                                            });
                                           }
                                         },
                                         child: Text(
                                           DateTime.now()
                                                   .isBefore(subasta.fechaFin)
-                                              ? 'Pujar'
-                                              : 'Finalizada',
+                                              ? AppLocalizations.of(context)!
+                                                  .bid
+                                              : AppLocalizations.of(context)!
+                                                  .finished,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium,
@@ -272,10 +294,18 @@ class SubastasListWidgetState extends State<SubastasListWidget> {
           );
         } else if (state is SubastasErrorState) {
           return Center(
-            child: Text('Error: ${state.message}'),
+            child: Text(state.message !=
+                    'Exception: Error al obtener las subastas del usuario: {"message":"6000","error":"Not Found","statusCode":404}'
+                ? state.message
+                : AppLocalizations.of(context)!.bids_not_found),
+          );
+        } else if (state is SubastasErrorState) {
+          return Center(
+            child: Text(state.message),
           );
         } else {
-          return const Center(child: Text('No se encontraron subastas.'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.bids_not_found));
         }
       },
     );

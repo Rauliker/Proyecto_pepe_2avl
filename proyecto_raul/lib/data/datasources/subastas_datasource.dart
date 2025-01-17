@@ -19,6 +19,7 @@ class SubastasRemoteDataSource {
     String creatorId,
     List<PlatformFile> imagenes,
   ) async {
+    int i = 0;
     final url = Uri.parse('$baseUrl/pujas');
 
     final request = http.MultipartRequest('POST', url);
@@ -30,13 +31,21 @@ class SubastasRemoteDataSource {
 
     for (var file in imagenes) {
       if (file.bytes != null) {
+        final extension = file.name.contains('.')
+            ? file.name.substring(file.name.lastIndexOf('.'))
+            : '';
+
+        final fileName = '$creatorId-$nombre-$i$extension';
+
         request.files.add(
           http.MultipartFile.fromBytes(
             'files',
             file.bytes!,
-            filename: file.name,
+            filename: fileName,
           ),
         );
+
+        i++;
       }
     }
 
@@ -146,7 +155,7 @@ class SubastasRemoteDataSource {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: json.encode(subastaData), // Convertir el mapa en JSON
+      body: json.encode(subastaData),
     );
 
     if (response.statusCode != 201 && response.statusCode != 200) {

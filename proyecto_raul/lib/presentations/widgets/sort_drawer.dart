@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showSortDrawer(
     BuildContext context,
@@ -18,9 +19,9 @@ void showSortDrawer(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Ordenar',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context)!.sort,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -36,7 +37,7 @@ void showSortDrawer(
                 Navigator.pop(context);
               },
               child: Text(
-                'Ordenar por precio ${price ? '↑' : '↓'}',
+                '${AppLocalizations.of(context)!.priceSort} ${price ? AppLocalizations.of(context)!.ascending : AppLocalizations.of(context)!.descending}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
@@ -53,7 +54,7 @@ void showSortDrawer(
                 Navigator.pop(context);
               },
               child: Text(
-                'Ordenar por fecha ${date ? '↑' : '↓'}',
+                '${AppLocalizations.of(context)!.dateSort} ${date ? AppLocalizations.of(context)!.ascending : AppLocalizations.of(context)!.descending}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),

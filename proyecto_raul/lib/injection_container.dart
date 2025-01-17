@@ -12,6 +12,7 @@ import 'package:proyecto_raul/domain/repositories/user_repisitory.dart';
 import 'package:proyecto_raul/domain/usercase/prov_usercase.dart';
 import 'package:proyecto_raul/domain/usercase/subastas_usecase.dart';
 import 'package:proyecto_raul/domain/usercase/user_usecase.dart';
+import 'package:proyecto_raul/presentations/bloc/language/language_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
@@ -59,6 +60,7 @@ Future<void> init() async {
 
   // Blocs
   sl.registerFactory(() => ProvBloc(sl()));
+  sl.registerFactory(() => LanguageBloc());
   sl.registerFactory(() => UserBloc(sl(), sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(
       () => SubastasBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));

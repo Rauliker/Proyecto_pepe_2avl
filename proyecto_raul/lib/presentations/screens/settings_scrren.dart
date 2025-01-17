@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -8,15 +9,22 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configuración y privacidad'),
+        title: Text(AppLocalizations.of(context)!.settings_title),
       ),
       body: ListView(
         children: [
           ListTile(
             leading: const Icon(Icons.lock),
-            title: const Text('Cambiar contraseña'),
+            title: Text(AppLocalizations.of(context)!.change_pass),
             onTap: () {
-              context.go('/change-password');
+              context.push('/change-password');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: Text(AppLocalizations.of(context)!.change_language_title),
+            onTap: () {
+              context.push('/change-language');
             },
           ),
         ],

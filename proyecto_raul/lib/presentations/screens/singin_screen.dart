@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/domain/entities/provincias.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
@@ -66,11 +67,12 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
       if (_passwordController.text.isEmpty ||
           _selectedProvincia == null ||
           _selectedMunicipio == null) {
-        errorMessage = 'Por favor complete todos los campos.';
+        errorMessage = AppLocalizations.of(context)!.error_incomplete_fields;
       } else if (_passwordController.text.length < 6) {
-        errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+        errorMessage = AppLocalizations.of(context)!.error_short_password;
       } else if (_passwordController.text != _repeatPasswordController.text) {
-        errorMessage = 'Las contraseñas no coinciden.';
+        errorMessage =
+            AppLocalizations.of(context)!.error_passwords_do_not_match;
       }
       ErrorDialog.show(context, errorMessage);
       return;
@@ -91,19 +93,19 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear Usuario')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.create_user)),
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(listener: (context, userState) {
             if (userState is SignupSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content:
-                      Text('Usuario creado con éxito: ${userState.user.email}'),
+                  content: Text(AppLocalizations.of(context)!
+                      .user_created_success(userState.user.email)),
                 ),
               );
               context.go('/login');
-            } else if (userState is SignupFailure) {
+            } else if (userState is UserError) {
               ErrorDialog.show(context, userState.message);
             }
           }),
@@ -124,26 +126,30 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
               children: [
                 TextField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.email),
                 ),
                 TextField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(labelText: 'Username'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.username),
                 ),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.password),
                 ),
                 TextField(
                   controller: _repeatPasswordController,
                   obscureText: true,
-                  decoration:
-                      const InputDecoration(labelText: 'Repetir Password'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.repeat_password),
                 ),
                 DropdownButtonFormField<int>(
                   value: _selectedProvincia,
-                  decoration: const InputDecoration(labelText: 'Provincia'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.province),
                   items: _provinciasConMunicipios.map((provincia) {
                     return DropdownMenuItem<int>(
                       value: provincia.idProvincia,
@@ -159,7 +165,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 ),
                 DropdownButtonFormField<int>(
                   value: _selectedMunicipio,
-                  decoration: const InputDecoration(labelText: 'Municipio'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.municipality),
                   items: _selectedProvincia != null
                       ? _provinciasConMunicipios
                           .firstWhere(
@@ -184,15 +191,14 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 ),
                 TextField(
                   controller: _calleController,
-                  decoration: const InputDecoration(labelText: 'Calle'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.street),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _pickImages,
-                  child: Text(
-                    'Seleccionar Imágenes',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.select_avatar,
+                      style: Theme.of(context).textTheme.bodyMedium),
                 ),
                 const SizedBox(height: 10),
                 Wrap(
@@ -206,16 +212,15 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 ),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text(
-                    'Crear Usuario',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.create_user_button,
+                      style: Theme.of(context).textTheme.bodyMedium),
                 ),
                 TextButton(
                   onPressed: () {
                     context.go('/login');
                   },
-                  child: const Text('Si ya tienes una cuenta, inicia sesión'),
+                  child:
+                      Text(AppLocalizations.of(context)!.already_have_account),
                 ),
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
@@ -38,8 +39,8 @@ class _SubFormState extends State<SubForm> {
       if (result != null) {
         if (_imagenes.length + result.files.length > 5) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Solo se pueden seleccionar hasta 5 imágenes.'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.select_images_error),
             ),
           );
         } else {
@@ -77,8 +78,8 @@ class _SubFormState extends State<SubForm> {
 
     if (_imagenes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debe seleccionar al menos una imagen.'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.image_error),
         ),
       );
       return;
@@ -100,7 +101,7 @@ class _SubFormState extends State<SubForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Crear Sub')),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.create_sub)),
         body: MultiBlocListener(
           listeners: [
             BlocListener<SubastasBloc, SubastasState>(
@@ -108,10 +109,11 @@ class _SubFormState extends State<SubForm> {
               if (subState is SubastaCreatedState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Subasta creado con éxito $email'),
+                    content: Text(
+                        AppLocalizations.of(context)!.bid_crate_sucess(email!)),
                   ),
                 );
-                context.go('/mysub');
+                context.go('/my_sub');
               } else if (subState is SubastasErrorState) {
                 ErrorDialog.show(context, subState.message);
               }
@@ -127,17 +129,20 @@ class _SubFormState extends State<SubForm> {
                   children: [
                     TextFormField(
                       controller: _nombreController,
-                      decoration: const InputDecoration(labelText: 'Nombre'),
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.name_label),
                       validator: (value) => value == null || value.isEmpty
-                          ? 'Por favor ingrese el nombre'
+                          ? AppLocalizations.of(context)!.name_label_error
                           : null,
                     ),
                     TextFormField(
                       controller: _descripcionController,
-                      decoration:
-                          const InputDecoration(labelText: 'Descripción'),
+                      decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.description_label),
                       validator: (value) => value == null || value.isEmpty
-                          ? 'Por favor ingrese la descripción'
+                          ? AppLocalizations.of(context)!
+                              .description_label_error
                           : null,
                     ),
                     TextFormField(
@@ -147,14 +152,15 @@ class _SubFormState extends State<SubForm> {
                       keyboardType: TextInputType.number,
                       validator: (value) =>
                           value == null || double.tryParse(value) == null
-                              ? 'Por favor ingrese un número válido'
+                              ? AppLocalizations.of(context)!
+                                  .sub_peice_initial_error
                               : null,
                     ),
                     TextFormField(
                       controller: _fechaFinController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Fecha de Fin',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.date_end,
                         suffixIcon: Icon(Icons.calendar_today),
                       ),
                       onTap: _selectDate,
@@ -163,7 +169,7 @@ class _SubFormState extends State<SubForm> {
                     ElevatedButton(
                       onPressed: _pickImages,
                       child: Text(
-                        'Seleccionar Imágenes',
+                        AppLocalizations.of(context)!.select_images,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
@@ -181,14 +187,14 @@ class _SubFormState extends State<SubForm> {
                     ElevatedButton(
                       onPressed: _submitForm,
                       child: Text(
-                        'Crear Sub',
+                        AppLocalizations.of(context)!.create_sub,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () => context.go('/my_sub'),
                       child: Text(
-                        'cancelar',
+                        AppLocalizations.of(context)!.cancel,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),

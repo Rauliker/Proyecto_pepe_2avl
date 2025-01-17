@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
@@ -52,20 +53,20 @@ class _SubEditFormState extends State<SubEditForm> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirmar'),
-          content: const Text('¿Seguro que eliminar la subasta?'),
+          title: Text(AppLocalizations.of(context)!.logout_confirmation),
+          content: Text(AppLocalizations.of(context)!.delete_auction_quest),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('Cancelar'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('Eliminar'),
+              child: Text(AppLocalizations.of(context)!.delete),
             ),
           ],
         );
@@ -113,7 +114,7 @@ class _SubEditFormState extends State<SubEditForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Crear Sub')),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.edit_bid)),
         body: MultiBlocListener(
           listeners: [
             BlocListener<SubastasBloc, SubastasState>(
@@ -121,7 +122,8 @@ class _SubEditFormState extends State<SubEditForm> {
               if (subState is SubastaUpdatedState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Subasta editada con éxito $email'),
+                    content: Text(AppLocalizations.of(context)!
+                        .bid_update_success(email ?? '')),
                   ),
                 );
                 context.go('/my_sub');
@@ -130,8 +132,8 @@ class _SubEditFormState extends State<SubEditForm> {
               } else if (subState is SubastaDeletedState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content:
-                        Text('Subasta eliminada con exito con éxito $email'),
+                    content: Text(
+                        AppLocalizations.of(context)!.bid_delete(email ?? '')),
                   ),
                 );
                 context.go('/my_sub');
@@ -150,31 +152,35 @@ class _SubEditFormState extends State<SubEditForm> {
                   children: [
                     TextFormField(
                       controller: _nombreController,
-                      decoration: const InputDecoration(labelText: 'Nombre'),
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.name_label),
                       validator: (value) => value == null || value.isEmpty
-                          ? 'Por favor ingrese el nombre'
+                          ? AppLocalizations.of(context)!.name_label_error
                           : null,
                     ),
                     TextFormField(
                       controller: _descripcionController,
-                      decoration:
-                          const InputDecoration(labelText: 'Descripción'),
+                      decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.description_label),
                       validator: (value) => value == null || value.isEmpty
-                          ? 'Por favor ingrese la descripción'
+                          ? AppLocalizations.of(context)!
+                              .description_label_error
                           : null,
                     ),
                     TextFormField(
                       controller: _SubInicialController,
-                      decoration:
-                          const InputDecoration(labelText: 'Sub Inicial'),
+                      decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.sub_peice_initial),
                       keyboardType: TextInputType.number,
                       enabled: false,
                     ),
                     TextFormField(
                       controller: _fechaFinController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Fecha de Fin',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.date_end,
                         suffixIcon: Icon(Icons.calendar_today),
                       ),
                       onTap: _selectDate,
@@ -183,23 +189,22 @@ class _SubEditFormState extends State<SubEditForm> {
                     ElevatedButton(
                       onPressed: _submitForm,
                       child: Text(
-                        'Editar',
+                        AppLocalizations.of(context)!.edit,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
-                      //DeleteSubastaEvent
                       onPressed: () => showsubDeleteDialog(),
                       child: Text(
-                        'Eliminar',
+                        AppLocalizations.of(context)!.delete,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () => context.go('/my_sub'),
                       child: Text(
-                        'cancelar',
+                        AppLocalizations.of(context)!.cancel,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),

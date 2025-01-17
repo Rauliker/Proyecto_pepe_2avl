@@ -1,0 +1,175 @@
+{
+  "@@locale": "es",
+  "error":"Error",
+  "appTitleLogin": "Iniciar sesión",
+  "emailLabel": "Correo electrónico",
+  "passwordLabel": "Contraseña",
+  "loginButton": "Iniciar sesión",
+  "loginSuccess": "¡Inicio de sesión exitoso!",
+  "loginFailure": "Error al iniciar sesión: {errorMessage}",
+  "signupPrompt": "Si no tienes una cuenta, regístrate",
+  "@loginFailure": {
+    "description": "Mensaje mostrado cuando el inicio de sesión falla",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "Credenciales inválidas"
+      }
+    }
+  },
+  "create_user": "Crear Usuario",
+  "email": "Correo electrónico",
+  "username": "Nombre de usuario",
+  "password": "Contraseña",
+  "new_password": "Contraseña",
+  "repeat_password": "Repetir contraseña",
+  "province": "Provincia",
+  "municipality": "Municipio",
+  "street": "Calle",
+  
+  "select_avatar": "Seleccionar Avatar",
+  "select_images": "Seleccionar Imágenes",
+  "select_images_error": "Solo se pueden seleccionar hasta 5 imágenes.",
+  "create_user_button": "Crear Usuario",
+  "already_have_account": "Si ya tienes una cuenta, inicia sesión",
+  "error_empty_password": "La contraseña no puede estar vacía.",
+  "error_short_password": "La contraseña debe tener al menos 6 caracteres.",
+  "error_passwords_do_not_match": "Las contraseñas no coinciden.",
+  "error_incomplete_fields": "Por favor complete todos los campos.",
+  "user_created_success": "Usuario creado con éxito: {email}",
+  "error_create_user": "Error al crear el usuario: {message}",
+  "@error_create_user": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "error_select_images": "Error al seleccionar imágenes: {errorMessage}",
+  "@error_select_images": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "search":"Buscar por nombre o descripción",
+  "my_Bid":"Mis subastas",
+  "error_dialog":"Error: {errorMessage}",
+  "@error_dialog": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "close":"Cerrar",
+  "menu":"Menú",
+  "menu_hello":"Hola, {message}",
+  "@menu_hello": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "home": "Inicio",
+  "profile": "Perfil",
+  "settings": "Configuración",
+  "logout": "Cerrar sesión",
+  "confirm_logout": "¿Seguro que quieres cerrar sesión?",
+  "cancel": "Cancelar",
+  "logout_confirmation": "Confirmar",
+
+  "settings_title":"Configuración y privacida",
+  "change_pass":"Cambiar contraseña",
+  "profile_update_success":"Perfil actualizado con éxito",
+  "profile_update":"Editar Perfil",
+  "change_avatar":"Cambiar Avatar",
+  "wellcome": "Hola {username}, estas son las subastas disponibles:",
+  "@wellcome": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "days_left":"Finaliza {days_left}",
+  "@days_left": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "days_left": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "winner":"Ganador {winner}",
+  "@winner": {
+    "description": "Mensaje mostrado cuando se crea la cuenta",
+    "placeholders": {
+      "winner": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  
+  "edit":"Editar",
+  "finished":"Finalizada",
+  "bids_not_found":"No se encontraron subastas.",
+  "user_load_error":"Error cargando los datos del usuario",
+  "user_not_found":"No se encontraron datos del usuario",
+
+  "filters": "Filtros",
+  "min_price": "Precio mínimo",
+  "max_price": "Precio máximo",
+  "apply_filters": "Aplicar filtros",
+  "min_price_error": "El precio mínimo no puede ser mayor que el máximo",
+  "invalid_price_error": "Asegúrese de que los precios sean números válidos y no estén vacíos",
+  "min_price_greater_than_max_error": "El precio mínimo no puede ser mayor que el precio máximo disponible.",
+  "max_price_less_than_min_error": "El precio máximo no puede ser menor que el precio mínimo disponible.",
+  "min_price_greater_than_max_price": "El precio mínimo no puede ser mayor que el precio máximo.",
+  "min_price_less_than_min_available": "El precio mínimo no puede ser menor que {precioMasBajo}.",
+  "max_price_greater_than_max_available": "El precio máximo no puede ser mayor a {precioMasAlto}",
+
+  "sort": "Ordenar",
+  "priceSort": "Ordenar por precio",
+  "dateSort": "Ordenar por fecha",
+  "ascending": "↑",
+  "descending": "↓",
+
+  "hello_bid":"Estas son las subastas disponibles: {length}",
+  "bid":"Pujar",
+
+  "name_label": "Nombre",
+  "name_label_error":"Por favor ingrese el nombre",
+  "description_label": "Descripción",
+  "description_label_error": "Por favor ingrese la descripción",
+  "sub_peice_initial": "Precio Inicial",
+  "sub_peice_initial_error": "Por favor ingrese un número válido",
+  "date_end": "Fecha de Fin",
+  "create_sub": "Crear Sub",
+  "image_error": "Debe seleccionar al menos una imagen.",
+  "bid_crate_sucess":"Subasta creado con éxito {email}",
+
+  "bid_update_success":"Subasta editada con éxito {email}",
+  "bid_delete":"Subasta eliminada con exito con éxito {email}",
+
+  "delete":"Eliminar",
+  "edit_bid":"Editar Sub",
+
+  "change_language_title":"Cambiar idioma",
+  "inicio":"inicio",
+  "delete_auction_quest":"¿Seguro que eliminar la subasta?"
+}

@@ -7,14 +7,8 @@ abstract class UserRepository {
       int idprovincia, int idmunicipio, String calle, List<PlatformFile> image);
   Future<User> getUserByEmail(String email);
   Future<List<User>> getUsersInfo(String email);
-  Future<User> updateUserProfile(
-    String email,
-    String username,
-    int idprovincia,
-    int idmunicipio,
-    String calle,
-    /*List<PlatformFile> imagen */
-  );
+  Future<User> updateUserProfile(String email, String username, int idprovincia,
+      int idmunicipio, String calle, List<PlatformFile> imagen);
   Future<User> updateUserPass(
     String password,
   );

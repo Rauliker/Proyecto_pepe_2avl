@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/domain/entities/provincias.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
@@ -74,15 +75,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     } catch (e) {
-      ErrorDialog.show(context, 'Error al seleccionar imágenes: $e');
+      ErrorDialog.show(context,
+          AppLocalizations.of(context)!.error_select_images(e.toString()));
     }
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_passwordController.text.isNotEmpty &&
         _passwordController.text.length < 6) {
       ErrorDialog.show(
-          context, 'La contraseña debe tener al menos 6 caracteres.');
+          context, AppLocalizations.of(context)!.error_short_password);
       return;
     }
 
@@ -93,21 +95,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             idprovincia: _selectedProvincia!,
             idmunicipio: _selectedMunicipio!,
             calle: _calleController.text,
-            // images: _imagenes.isNotEmpty ? _imagenes : null,
+            imagen: _imagenes.isNotEmpty ? _imagenes : [],
           ),
         );
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email');
+    if (email != null) {
+      context.read<UserBloc>().add(UserDataRequest(email: email));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar Perfil')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.profile_update)),
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(listener: (context, userState) {
             if (userState is SignupSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Perfil actualizado con éxito')),
+                SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.profile_update_success)),
               );
               context.go('/home');
             } else if (userState is UserError) {
@@ -136,7 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundImage: _imagenes.isNotEmpty
                       ? MemoryImage(_imagenes[0].bytes!)
                       : _avatarUrl.isNotEmpty
-                          ? NetworkImage("$_baseUrl$_avatarUrl")
+                          ? NetworkImage(
+                              "$_baseUrl$_avatarUrl?timestamp=${DateTime.now().millisecondsSinceEpoch}")
                           : null,
                   child: _avatarUrl.isEmpty && _imagenes.isEmpty
                       ? const Icon(Icons.person, size: 40)
@@ -144,20 +154,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 TextButton(
                   onPressed: _pickImages,
-                  child: const Text('Cambiar Avatar'),
+                  child: Text(AppLocalizations.of(context)!.change_avatar),
                 ),
                 TextField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.email),
                   enabled: false,
                 ),
                 TextField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(labelText: 'Username'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.username),
                 ),
                 DropdownButtonFormField<int>(
                   value: _selectedProvincia,
-                  decoration: const InputDecoration(labelText: 'Provincia'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.province),
                   items: _provinciasConMunicipios.map((provincia) {
                     return DropdownMenuItem<int>(
                       value: provincia.idProvincia,
@@ -167,14 +180,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onChanged: (provinciaId) {
                     setState(() {
                       _selectedProvincia = provinciaId;
-                      _selectedMunicipio =
-                          null; // Reset municipio cuando cambia provincia
+                      _selectedMunicipio = null;
                     });
                   },
                 ),
                 DropdownButtonFormField<int>(
                   value: _selectedMunicipio,
-                  decoration: const InputDecoration(labelText: 'Municipio'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.municipality),
                   items: _selectedProvincia != null
                       ? _provinciasConMunicipios
                           .firstWhere(
@@ -199,7 +212,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 TextField(
                   controller: _calleController,
-                  decoration: const InputDecoration(labelText: 'Calle'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.street),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -213,7 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     context.go('/home');
                   },
-                  child: const Text('Cancelar'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 ),
               ],
             ),

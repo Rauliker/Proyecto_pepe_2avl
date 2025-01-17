@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/injection_container.dart' as di;
+import 'package:proyecto_raul/presentations/bloc/language/language_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
+import 'package:proyecto_raul/presentations/screens/change_language_screen.dart';
 import 'package:proyecto_raul/presentations/screens/change_password.dart';
 import 'package:proyecto_raul/presentations/screens/crear_sub_form.dart';
 import 'package:proyecto_raul/presentations/screens/edit_sub_form.dart';
@@ -152,6 +154,13 @@ final GoRouter router = GoRouter(
       ),
     ),
     GoRoute(
+      path: '/change-language',
+      builder: (context, state) => BlocProvider(
+        create: (context) => di.sl<LanguageBloc>(),
+        child: const ChangeLanguageScreen(),
+      ),
+    ),
+    GoRoute(
       path: '/change-password',
       builder: (context, state) => BlocProvider(
         create: (context) => di.sl<UserBloc>(),
@@ -162,7 +171,12 @@ final GoRouter router = GoRouter(
   redirect: (context, state) async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
-
+    if (state.matchedLocation == '/splash') {
+      if (email != null && email.isNotEmpty) {
+        return '/home';
+      }
+      return '/login';
+    }
     if (email != null && email.isNotEmpty) {
       if (state.matchedLocation == '/login' ||
           state.matchedLocation == '/signup') {

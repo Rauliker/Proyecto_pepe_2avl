@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/domain/entities/subastas_entities.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
@@ -64,7 +65,7 @@ class MySubsBodyState extends State<MySubsBody> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Hola ${state.user.username}, estas son las subastas disponibles:',
+                  AppLocalizations.of(context)!.wellcome(state.user.email),
                 ),
               ),
               Expanded(
@@ -192,8 +193,18 @@ class MySubsBodyState extends State<MySubsBody> {
                                             Text(
                                               DateTime.now().isBefore(
                                                       subasta.fechaFin)
-                                                  ? 'Quedan: ${getTimeRemaining(subasta.fechaFin)}'
-                                                  : 'Ganador: ${subasta.pujas?.last.emailUser}',
+                                                  ? AppLocalizations.of(
+                                                          context)!
+                                                      .days_left(
+                                                          getTimeRemaining(
+                                                              subasta.fechaFin))
+                                                  : AppLocalizations.of(
+                                                          context)!
+                                                      .winner(subasta
+                                                              .pujas
+                                                              ?.last
+                                                              .emailUser ??
+                                                          ''),
                                               style: TextStyle(
                                                   color: Colors.grey.shade600),
                                             ),
@@ -208,25 +219,17 @@ class MySubsBodyState extends State<MySubsBody> {
                                                   child: Text(
                                                     now.isBefore(
                                                             subasta.fechaFin)
-                                                        ? 'Editar'
-                                                        : 'Finalizada',
+                                                        ? AppLocalizations.of(
+                                                                context)!
+                                                            .edit
+                                                        : AppLocalizations.of(
+                                                                context)!
+                                                            .finished,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyMedium,
                                                   ),
                                                 ),
-                                                const SizedBox(width: 8.0),
-                                                Text(
-                                                  now.isBefore(subasta.fechaFin)
-                                                      ? ''
-                                                      : (subasta.pujas !=
-                                                                  null &&
-                                                              subasta.pujas!
-                                                                  .isNotEmpty)
-                                                          ? subasta.pujas!.last
-                                                              .emailUser
-                                                          : '',
-                                                )
                                               ],
                                             )
                                           ],
@@ -256,14 +259,15 @@ class MySubsBodyState extends State<MySubsBody> {
                       return Center(
                         child: Text(
                           subastasState.message !=
-                                  'Exception: {"message":"No se encontraron subastas del usuario de otros usuarios.","error":"Not Found","statusCode":404}'
-                              ? 'Error: ${subastasState.message}'
-                              : 'No se encontraron subastas.',
+                                  'Exception: {"message":"6000","error":"Not Found","statusCode":404}'
+                              ? subastasState.message
+                              : AppLocalizations.of(context)!.bids_not_found,
                         ),
                       );
                     } else {
-                      return const Center(
-                          child: Text('No se encontraron subastas'));
+                      return Center(
+                          child: Text(
+                              AppLocalizations.of(context)!.bids_not_found));
                     }
                   },
                 ),
@@ -271,11 +275,11 @@ class MySubsBodyState extends State<MySubsBody> {
             ],
           );
         } else if (state is UserError) {
-          return const Center(
-              child: Text('Error cargando los datos del usuario'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.user_load_error));
         } else {
-          return const Center(
-              child: Text('No se encontraron datos del usuario'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.user_not_found));
         }
       },
     );

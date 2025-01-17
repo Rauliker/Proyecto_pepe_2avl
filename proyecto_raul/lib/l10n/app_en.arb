@@ -1,0 +1,175 @@
+{
+  "@@locale": "en",
+  "error":"Error",
+  "appTitleLogin": "Log In",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "loginButton": "Log In",
+  "loginSuccess": "Login successful!",
+  "loginFailure": "Login failed: {errorMessage}",
+  "signupPrompt": "If you don't have an account, sign up",
+  "@loginFailure": {
+    "description": "Message shown when login fails",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "Invalid credentials"
+      }
+    }
+  },
+  "create_user": "Create User",
+  "email": "Email",
+  "username": "Username",
+  "password": "Password",
+  "new_password": "Password",
+  "repeat_password": "Repeat Password",
+  "province": "Province",
+  "municipality": "Municipality",
+  "street": "Street",
+
+  "select_avatar": "Select Avatar",
+  "select_images": "Select Images",
+  "select_images_error": "You can select up to 5 images only.",
+  "create_user_button": "Create User",
+  "already_have_account": "If you already have an account, log in",
+  "error_empty_password": "Password cannot be empty.",
+  "error_short_password": "Password must be at least 6 characters long.",
+  "error_passwords_do_not_match": "Passwords do not match.",
+  "error_incomplete_fields": "Please complete all fields.",
+  "user_created_success": "User created successfully: {email}",
+  "error_create_user": "Error creating user: {message}",
+  "@error_create_user": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "error_select_images": "Error selecting images: {errorMessage}",
+  "@error_select_images": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "search": "Search by name or description",
+  "my_Bid": "My Bids",
+  "error_dialog": "Error: {errorMessage}",
+  "@error_dialog": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "close": "Close",
+  "menu": "Menu",
+  "menu_hello": "Hello, {message}",
+  "@menu_hello": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "home": "Home",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Log Out",
+  "confirm_logout": "Are you sure you want to log out?",
+  "cancel": "Cancel",
+  "logout_confirmation": "Confirm",
+
+  "settings_title": "Settings and Privacy",
+  "change_pass": "Change Password",
+  "profile_update_success": "Profile updated successfully",
+  "profile_update": "Edit Profile",
+  "change_avatar": "Change Avatar",
+  "wellcome": "Hello {username}, these are the available bids:",
+  "@wellcome": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "days_left": "Ends {days_left}",
+  "@days_left": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "days_left": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "winner": "Winner {winner}",
+  "@winner": {
+    "description": "Message shown when the account is created",
+    "placeholders": {
+      "winner": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+
+  "edit": "Edit",
+  "finished": "Finished",
+  "bids_not_found": "No auctions found.",
+  "user_load_error": "Error loading user data",
+  "user_not_found": "No user data found",
+
+  "filters": "Filters",
+  "min_price": "Minimum Price",
+  "max_price": "Maximum Price",
+  "apply_filters": "Apply Filters",
+  "min_price_error": "The minimum price cannot be greater than the maximum price.",
+  "invalid_price_error": "Make sure the prices are valid numbers and not empty.",
+  "min_price_greater_than_max_error": "The minimum price cannot be greater than the maximum available price.",
+  "max_price_less_than_min_error": "The maximum price cannot be less than the minimum available price.",
+  "min_price_greater_than_max_price": "The minimum price cannot be greater than the maximum price.",
+  "min_price_less_than_min_available": "The minimum price cannot be less than {precioMasBajo}.",
+  "max_price_greater_than_max_available": "The maximum price cannot be greater than {precioMasAlto}.",
+
+  "sort": "Sort",
+  "priceSort": "Sort by Price",
+  "dateSort": "Sort by Date",
+  "ascending": "↑",
+  "descending": "↓",
+
+  "hello_bid": "These are the available auctions: {length}",
+  "bid": "Bid up",
+
+  "name_label": "Name",
+  "name_label_error": "Please enter the name",
+  "description_label": "Description",
+  "description_label_error": "Please enter the description",
+  "sub_peice_initial": "Initial Price",
+  "sub_peice_initial_error": "Please enter a valid number",
+  "date_end": "End Date",
+  "create_sub": "Create Auction",
+  "image_error": "You must select at least one image.",
+  "bid_crate_sucess": "Auction created successfully {email}",
+
+  "bid_update_success": "Auction updated successfully {email}",
+  "bid_delete": "Auction deleted successfully {email}",
+
+  "delete": "Delete",
+  "edit_bid": "Edit Auction",
+
+  "change_language_title": "Change Language",
+  "inicio": "home",
+  "delete_auction_quest":"Are you sure you want to delete the auction?"
+}

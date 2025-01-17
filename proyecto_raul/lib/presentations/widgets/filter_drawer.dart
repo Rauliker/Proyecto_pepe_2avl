@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proyecto_raul/presentations/widgets/dialog/error_dialog.dart';
 
 void showFiltersDrawer(
@@ -24,17 +25,17 @@ void showFiltersDrawer(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Filtros',
+            Text(
+              AppLocalizations.of(context)!.filters,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: minPriceController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Precio mínimo',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.min_price,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
                 if (double.tryParse(value) != null &&
@@ -43,9 +44,9 @@ void showFiltersDrawer(
                   double max = double.parse(maxPriceController.text);
                   if (min > max) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text(
-                              'El precio mínimo no puede ser mayor que el máximo')),
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context)!
+                              .min_price_greater_than_max_error)),
                     );
                   }
                 }
@@ -55,9 +56,9 @@ void showFiltersDrawer(
             TextField(
               controller: maxPriceController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Precio máximo',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.max_price,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
@@ -72,29 +73,39 @@ void showFiltersDrawer(
 
                 if (minPrice == null || maxPrice == null) {
                   ErrorDialog.show(context,
-                      'Asegúrese de que los precios sean números válidos y no estén vacíos');
+                      AppLocalizations.of(context)!.invalid_price_error);
                 } else if (minPrice > precioMasAlto!) {
-                  ErrorDialog.show(context,
-                      'El precio mínimo no puede ser mayor que el precio máximo disponible.');
+                  ErrorDialog.show(
+                      context,
+                      AppLocalizations.of(context)!
+                          .min_price_greater_than_max_error);
                 } else if (maxPrice < precioMasBajo!) {
-                  ErrorDialog.show(context,
-                      'El precio máximo no puede ser menor que el precio mínimo disponible.');
+                  ErrorDialog.show(
+                      context,
+                      AppLocalizations.of(context)!
+                          .max_price_less_than_min_error);
                 } else if (minPrice > maxPrice) {
-                  ErrorDialog.show(context,
-                      'El precio mínimo no puede ser mayor que el precio máximo.');
+                  ErrorDialog.show(
+                      context,
+                      AppLocalizations.of(context)!
+                          .min_price_greater_than_max_price);
                 } else if (minPrice < precioMasBajo) {
-                  ErrorDialog.show(context,
-                      'El precio mínimo no puede ser menor que $precioMasBajo.');
+                  ErrorDialog.show(
+                      context,
+                      AppLocalizations.of(context)!
+                          .min_price_less_than_min_available(precioMasBajo));
                 } else if (maxPrice > precioMasAlto) {
-                  ErrorDialog.show(context,
-                      'El precio maximo no puede ser mayor a $precioMasAlto');
+                  ErrorDialog.show(
+                      context,
+                      AppLocalizations.of(context)!
+                          .max_price_greater_than_max_available(precioMasAlto));
                 } else {
                   onFilterApplied(minPrice.toDouble(), maxPrice.toDouble());
                   Navigator.pop(context);
                 }
               },
               child: Text(
-                'Aplicar filtros',
+                AppLocalizations.of(context)!.apply_filters,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             )

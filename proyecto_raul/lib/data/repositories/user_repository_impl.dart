@@ -37,21 +37,10 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User> updateUserProfile(
-    String email,
-    String username,
-    int idprovincia,
-    int idmunicipio,
-    String calle,
-    /*List<PlatformFile> imagen */
-  ) async {
+  Future<User> updateUserProfile(String email, String username, int idprovincia,
+      int idmunicipio, String calle, List<PlatformFile> imagen) async {
     return await remoteDataSource.updateUserProfile(
-      email,
-      username,
-      idprovincia,
-      idmunicipio,
-      calle, /*image*/
-    );
+        email, username, idprovincia, idmunicipio, calle, imagen);
   }
 
   @override

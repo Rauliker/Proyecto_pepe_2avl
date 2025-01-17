@@ -24,8 +24,8 @@ class ProvRemoteDataSourceImpl implements ProvRemoteDataSource {
       final List<dynamic> json = jsonDecode(response.body);
       return json.map((item) => Prov.fromJson(item)).toList();
     } else {
-      print(
-          'Fallo al obtener la información de las provincias: ${response.body}');
+      // print(
+      //     'Fallo al obtener la información de las provincias: ${response.body}');
       throw Exception(
           'Fallo al obtener la información de las provincias: ${response.body}');
     }

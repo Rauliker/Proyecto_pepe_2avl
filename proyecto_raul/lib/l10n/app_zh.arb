@@ -1,0 +1,175 @@
+{
+  "@@locale": "zh",
+  "error": "错误",
+  "appTitleLogin": "登录",
+  "emailLabel": "电子邮件",
+  "passwordLabel": "密码",
+  "loginButton": "登录",
+  "loginSuccess": "登录成功！",
+  "loginFailure": "登录失败：{errorMessage}",
+  "signupPrompt": "如果没有账户，请注册",
+  "@loginFailure": {
+    "description": "登录失败时显示的消息",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "无效的凭据"
+      }
+    }
+  },
+  "create_user": "创建用户",
+  "email": "电子邮件",
+  "username": "用户名",
+  "password": "密码",
+  "new_password": "新密码",
+  "repeat_password": "重复密码",
+  "province": "省份",
+  "municipality": "市",
+  "street": "街道",
+
+  "select_avatar": "选择头像",
+  "select_images": "选择图片",
+  "select_images_error": "最多只能选择5张图片。",
+  "create_user_button": "创建用户",
+  "already_have_account": "如果已有账户，请登录",
+  "error_empty_password": "密码不能为空。",
+  "error_short_password": "密码至少需要6个字符。",
+  "error_passwords_do_not_match": "密码不匹配。",
+  "error_incomplete_fields": "请填写所有字段。",
+  "user_created_success": "用户创建成功：{email}",
+  "error_create_user": "创建用户失败：{message}",
+  "@error_create_user": {
+    "description": "账户创建失败时显示的消息",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "error_select_images": "选择图片时出错：{errorMessage}",
+  "@error_select_images": {
+    "description": "选择图片失败时显示的消息",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "search": "按名称或描述搜索",
+  "my_Bid": "我的竞拍",
+  "error_dialog": "错误：{errorMessage}",
+  "@error_dialog": {
+    "description": "账户创建失败时显示的消息",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "close": "关闭",
+  "menu": "菜单",
+  "menu_hello": "你好，{message}",
+  "@menu_hello": {
+    "description": "账户创建失败时显示的消息",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "home": "首页",
+  "profile": "个人资料",
+  "settings": "设置",
+  "logout": "退出登录",
+  "confirm_logout": "确定要退出登录吗？",
+  "cancel": "取消",
+  "logout_confirmation": "确认",
+
+  "settings_title": "设置与隐私",
+  "change_pass": "更改密码",
+  "profile_update_success": "资料更新成功",
+  "profile_update": "编辑资料",
+  "change_avatar": "更换头像",
+  "wellcome": "你好 {username}，以下是可用的竞拍：",
+  "@wellcome": {
+    "description": "账户创建失败时显示的消息",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "days_left": "结束于 {days_left}",
+  "@days_left": {
+    "description": "账户创建失败时显示的消息",
+    "placeholders": {
+      "days_left": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "winner": "赢家 {winner}",
+  "@winner": {
+    "description": "账户创建失败时显示的消息",
+    "placeholders": {
+      "winner": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+
+  "edit": "编辑",
+  "finished": "已结束",
+  "bids_not_found": "未找到竞拍。",
+  "user_load_error": "加载用户数据出错",
+  "user_not_found": "未找到用户数据",
+
+  "filters": "过滤器",
+  "min_price": "最低价格",
+  "max_price": "最高价格",
+  "apply_filters": "应用过滤器",
+  "min_price_error": "最低价格不能高于最高价格",
+  "invalid_price_error": "确保价格为有效数字且不能为空",
+  "min_price_greater_than_max_error": "最低价格不能高于可用的最高价格。",
+  "max_price_less_than_min_error": "最高价格不能低于可用的最低价格。",
+  "min_price_greater_than_max_price": "最低价格不能高于最高价格。",
+  "min_price_less_than_min_available": "最低价格不能低于 {precioMasBajo}。",
+  "max_price_greater_than_max_available": "最高价格不能高于 {precioMasAlto}。",
+
+  "sort": "排序",
+  "priceSort": "按价格排序",
+  "dateSort": "按日期排序",
+  "ascending": "↑",
+  "descending": "↓",
+
+  "hello_bid": "以下是可用的竞拍：{length}",
+  "bid": "竞拍",
+
+  "name_label": "名称",
+  "name_label_error": "请输入名称",
+  "description_label": "描述",
+  "description_label_error": "请输入描述",
+  "sub_peice_initial": "起拍价",
+  "sub_peice_initial_error": "请输入有效数字",
+  "date_end": "结束日期",
+  "create_sub": "创建竞拍",
+  "image_error": "至少选择一张图片。",
+  "bid_crate_sucess": "竞拍创建成功 {email}",
+
+  "bid_update_success": "竞拍编辑成功 {email}",
+  "bid_delete": "竞拍删除成功 {email}",
+
+  "delete": "删除",
+  "edit_bid": "编辑竞拍",
+
+  "change_language_title": "更改语言",
+  "inicio": "首页",
+  "delete_auction_quest": "确定要删除此竞拍吗？"
+}

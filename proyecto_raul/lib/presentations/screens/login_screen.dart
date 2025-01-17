@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitleLogin)),
       body: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
@@ -28,7 +29,8 @@ class _LoginPageState extends State<LoginPage> {
                 .add(UserDataRequest(email: state.user.email));
 
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.user.email)),
+              SnackBar(
+                  content: Text(AppLocalizations.of(context)!.loginSuccess)),
             );
             context.go('/home');
             // if (state.user.role == 2) {
@@ -38,7 +40,9 @@ class _LoginPageState extends State<LoginPage> {
             // }
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              SnackBar(
+                  content: Text(AppLocalizations.of(context)!
+                      .loginFailure(state.message))),
             );
           }
         },
@@ -52,12 +56,14 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 TextField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.emailLabel),
                 ),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.passwordLabel),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -69,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                         .add(LoginRequested(email: email, password: password));
                   },
                   child: Text(
-                    'Login',
+                    AppLocalizations.of(context)!.loginButton,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -78,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     context.go('/signup');
                   },
-                  child: const Text('Si no tienes cuenta, regístrate'),
+                  child: Text(AppLocalizations.of(context)!.signupPrompt),
                 ),
               ],
             ),

@@ -106,7 +106,6 @@ class ViewSubInfoState extends State<ViewSubInfo> {
               if (state is SubastasLoadedStateId) {
                 pujaActual = state.subastas.pujaActual;
                 return SingleChildScrollView(
-                  // Agregado SingleChildScrollView
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

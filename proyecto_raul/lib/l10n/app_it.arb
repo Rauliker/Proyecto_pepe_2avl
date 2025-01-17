@@ -1,0 +1,175 @@
+{
+  "@@locale": "it",
+  "error": "Errore",
+  "appTitleLogin": "Accedi",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "loginButton": "Accedi",
+  "loginSuccess": "Accesso riuscito!",
+  "loginFailure": "Errore nell'accesso: {errorMessage}",
+  "signupPrompt": "Se non hai un account, registrati",
+  "@loginFailure": {
+    "description": "Messaggio mostrato quando l'accesso fallisce",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "Credenziali non valide"
+      }
+    }
+  },
+  "create_user": "Crea Utente",
+  "email": "Email",
+  "username": "Nome utente",
+  "password": "Password",
+  "new_password": "Nuova Password",
+  "repeat_password": "Ripeti Password",
+  "province": "Provincia",
+  "municipality": "Comune",
+  "street": "Via",
+  
+  "select_avatar": "Seleziona Avatar",
+  "select_images": "Seleziona Immagini",
+  "select_images_error": "Possono essere selezionate al massimo 5 immagini.",
+  "create_user_button": "Crea Utente",
+  "already_have_account": "Se hai già un account, accedi",
+  "error_empty_password": "La password non può essere vuota.",
+  "error_short_password": "La password deve essere lunga almeno 6 caratteri.",
+  "error_passwords_do_not_match": "Le password non corrispondono.",
+  "error_incomplete_fields": "Per favore completa tutti i campi.",
+  "user_created_success": "Utente creato con successo: {email}",
+  "error_create_user": "Errore nella creazione dell'utente: {message}",
+  "@error_create_user": {
+    "description": "Messaggio mostrato quando si verifica un errore nella creazione dell'account",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "error_select_images": "Errore nella selezione delle immagini: {errorMessage}",
+  "@error_select_images": {
+    "description": "Messaggio mostrato quando si verifica un errore nella selezione delle immagini",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "search": "Cerca per nome o descrizione",
+  "my_Bid": "Le mie aste",
+  "error_dialog": "Errore: {errorMessage}",
+  "@error_dialog": {
+    "description": "Messaggio mostrato quando si verifica un errore",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "close": "Chiudi",
+  "menu": "Menu",
+  "menu_hello": "Ciao, {message}",
+  "@menu_hello": {
+    "description": "Messaggio mostrato quando si accede al menu",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "home": "Home",
+  "profile": "Profilo",
+  "settings": "Impostazioni",
+  "logout": "Esci",
+  "confirm_logout": "Sei sicuro di voler uscire?",
+  "cancel": "Annulla",
+  "logout_confirmation": "Conferma",
+
+  "settings_title": "Impostazioni e privacy",
+  "change_pass": "Cambia password",
+  "profile_update_success": "Profilo aggiornato con successo",
+  "profile_update": "Modifica Profilo",
+  "change_avatar": "Cambia Avatar",
+  "wellcome": "Ciao {username}, queste sono le aste disponibili:",
+  "@wellcome": {
+    "description": "Messaggio mostrato quando l'utente si connette",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "days_left": "Termina tra {days_left}",
+  "@days_left": {
+    "description": "Messaggio mostrato quando manca poco tempo alla fine",
+    "placeholders": {
+      "days_left": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "winner": "Vincitore {winner}",
+  "@winner": {
+    "description": "Messaggio mostrato quando viene annunciato un vincitore",
+    "placeholders": {
+      "winner": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  
+  "edit": "Modifica",
+  "finished": "Conclusa",
+  "bids_not_found": "Nessuna asta trovata.",
+  "user_load_error": "Errore nel caricare i dati dell'utente",
+  "user_not_found": "Nessun dato utente trovato",
+
+  "filters": "Filtri",
+  "min_price": "Prezzo minimo",
+  "max_price": "Prezzo massimo",
+  "apply_filters": "Applica filtri",
+  "min_price_error": "Il prezzo minimo non può essere maggiore di quello massimo",
+  "invalid_price_error": "Assicurati che i prezzi siano numeri validi e che non siano vuoti",
+  "min_price_greater_than_max_error": "Il prezzo minimo non può essere maggiore del prezzo massimo disponibile.",
+  "max_price_less_than_min_error": "Il prezzo massimo non può essere inferiore al prezzo minimo disponibile.",
+  "min_price_greater_than_max_price": "Il prezzo minimo non può essere maggiore del prezzo massimo.",
+  "min_price_less_than_min_available": "Il prezzo minimo non può essere inferiore a {precioMasBajo}.",
+  "max_price_greater_than_max_available": "Il prezzo massimo non può essere maggiore di {precioMasAlto}",
+
+  "sort": "Ordina",
+  "priceSort": "Ordina per prezzo",
+  "dateSort": "Ordina per data",
+  "ascending": "↑",
+  "descending": "↓",
+
+  "hello_bid": "Ecco le aste disponibili: {length}",
+  "bid": "Fai un'offerta",
+
+  "name_label": "Nome",
+  "name_label_error": "Per favore inserisci il nome",
+  "description_label": "Descrizione",
+  "description_label_error": "Per favore inserisci la descrizione",
+  "sub_peice_initial": "Prezzo iniziale",
+  "sub_peice_initial_error": "Per favore inserisci un numero valido",
+  "date_end": "Data di fine",
+  "create_sub": "Crea Asta",
+  "image_error": "Devi selezionare almeno un'immagine.",
+  "bid_crate_sucess": "Asta creata con successo {email}",
+
+  "bid_update_success": "Asta modificata con successo {email}",
+  "bid_delete": "Asta eliminata con successo {email}",
+
+  "delete": "Elimina",
+  "edit_bid": "Modifica Asta",
+
+  "change_language_title": "Cambia lingua",
+  "inicio": "Inizio",
+  "delete_auction_quest": "Sei sicuro di voler eliminare l'asta?"
+}

@@ -1,0 +1,175 @@
+{
+  "@@locale": "fr",
+  "error": "Erreur",
+  "appTitleLogin": "Se connecter",
+  "emailLabel": "Adresse e-mail",
+  "passwordLabel": "Mot de passe",
+  "loginButton": "Se connecter",
+  "loginSuccess": "Connexion réussie !",
+  "loginFailure": "Échec de la connexion : {errorMessage}",
+  "signupPrompt": "Si vous n'avez pas de compte, inscrivez-vous",
+  "@loginFailure": {
+    "description": "Message affiché lorsque la connexion échoue",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "Identifiants invalides"
+      }
+    }
+  },
+  "create_user": "Créer un utilisateur",
+  "email": "Adresse e-mail",
+  "username": "Nom d'utilisateur",
+  "password": "Mot de passe",
+  "new_password": "Nouveau mot de passe",
+  "repeat_password": "Répéter le mot de passe",
+  "province": "Province",
+  "municipality": "Municipalité",
+  "street": "Rue",
+  
+  "select_avatar": "Sélectionner un avatar",
+  "select_images": "Sélectionner des images",
+  "select_images_error": "Vous ne pouvez sélectionner que jusqu'à 5 images.",
+  "create_user_button": "Créer un utilisateur",
+  "already_have_account": "Si vous avez déjà un compte, connectez-vous",
+  "error_empty_password": "Le mot de passe ne peut pas être vide.",
+  "error_short_password": "Le mot de passe doit contenir au moins 6 caractères.",
+  "error_passwords_do_not_match": "Les mots de passe ne correspondent pas.",
+  "error_incomplete_fields": "Veuillez remplir tous les champs.",
+  "user_created_success": "Utilisateur créé avec succès : {email}",
+  "error_create_user": "Erreur lors de la création de l'utilisateur : {message}",
+  "@error_create_user": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "error_select_images": "Erreur lors de la sélection des images : {errorMessage}",
+  "@error_select_images": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "search": "Rechercher par nom ou description",
+  "my_Bid": "Mes enchères",
+  "error_dialog": "Erreur : {errorMessage}",
+  "@error_dialog": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "close": "Fermer",
+  "menu": "Menu",
+  "menu_hello": "Bonjour, {message}",
+  "@menu_hello": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "home": "Accueil",
+  "profile": "Profil",
+  "settings": "Paramètres",
+  "logout": "Se déconnecter",
+  "confirm_logout": "Êtes-vous sûr de vouloir vous déconnecter ?",
+  "cancel": "Annuler",
+  "logout_confirmation": "Confirmer",
+
+  "settings_title": "Paramètres et confidentialité",
+  "change_pass": "Changer le mot de passe",
+  "profile_update_success": "Profil mis à jour avec succès",
+  "profile_update": "Modifier le profil",
+  "change_avatar": "Changer l'avatar",
+  "wellcome": "Bonjour {username}, voici les enchères disponibles :",
+  "@wellcome": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "days_left": "Se termine dans {days_left}",
+  "@days_left": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "days_left": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "winner": "Gagnant {winner}",
+  "@winner": {
+    "description": "Message affiché lors de la création du compte",
+    "placeholders": {
+      "winner": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  
+  "edit": "Modifier",
+  "finished": "Terminé",
+  "bids_not_found": "Aucune enchère trouvée.",
+  "user_load_error": "Erreur lors du chargement des données utilisateur",
+  "user_not_found": "Aucune donnée utilisateur trouvée",
+
+  "filters": "Filtres",
+  "min_price": "Prix minimum",
+  "max_price": "Prix maximum",
+  "apply_filters": "Appliquer les filtres",
+  "min_price_error": "Le prix minimum ne peut pas être supérieur au maximum",
+  "invalid_price_error": "Assurez-vous que les prix sont des nombres valides et ne sont pas vides",
+  "min_price_greater_than_max_error": "Le prix minimum ne peut pas être supérieur au prix maximum disponible.",
+  "max_price_less_than_min_error": "Le prix maximum ne peut pas être inférieur au prix minimum disponible.",
+  "min_price_greater_than_max_price": "Le prix minimum ne peut pas être supérieur au prix maximum.",
+  "min_price_less_than_min_available": "Le prix minimum ne peut pas être inférieur à {precioMasBajo}.",
+  "max_price_greater_than_max_available": "Le prix maximum ne peut pas dépasser {precioMasAlto}",
+
+  "sort": "Trier",
+  "priceSort": "Trier par prix",
+  "dateSort": "Trier par date",
+  "ascending": "↑",
+  "descending": "↓",
+
+  "hello_bid": "Voici les enchères disponibles : {length}",
+  "bid": "Enchérir",
+
+  "name_label": "Nom",
+  "name_label_error": "Veuillez entrer un nom",
+  "description_label": "Description",
+  "description_label_error": "Veuillez entrer une description",
+  "sub_peice_initial": "Prix initial",
+  "sub_peice_initial_error": "Veuillez entrer un nombre valide",
+  "date_end": "Date de fin",
+  "create_sub": "Créer une enchère",
+  "image_error": "Vous devez sélectionner au moins une image.",
+  "bid_crate_sucess": "Enchère créée avec succès {email}",
+
+  "bid_update_success": "Enchère modifiée avec succès {email}",
+  "bid_delete": "Enchère supprimée avec succès {email}",
+
+  "delete": "Supprimer",
+  "edit_bid": "Modifier l'enchère",
+
+  "change_language_title": "Changer la langue",
+  "inicio": "Accueil",
+  "delete_auction_quest": "Êtes-vous sûr de vouloir supprimer l'enchère ?"
+}

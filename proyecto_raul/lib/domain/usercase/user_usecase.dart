@@ -59,21 +59,10 @@ class CaseUseUserUpdateProfile {
 
   CaseUseUserUpdateProfile(this.repository);
 
-  Future<User> call(
-    String email,
-    String username,
-    int idprovincia,
-    int idmunicipio,
-    String calle,
-    /*List<PlatformFile> image */
-  ) async {
+  Future<User> call(String email, String username, int idprovincia,
+      int idmunicipio, String calle, List<PlatformFile> image) async {
     User userInfo = await repository.updateUserProfile(
-      email,
-      username,
-      idprovincia,
-      idmunicipio,
-      calle, /*image */
-    );
+        email, username, idprovincia, idmunicipio, calle, image);
     return userInfo;
   }
 }

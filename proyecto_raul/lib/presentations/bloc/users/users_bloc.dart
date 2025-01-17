@@ -61,13 +61,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserUpdateProfile>((event, emit) async {
       emit(UserLoading());
       try {
-        final user = await updateUserProfile(
-          event.email,
-          event.username,
-          event.idprovincia,
-          event.idmunicipio,
-          event.calle, /*event.imagen */
-        );
+        final user = await updateUserProfile(event.email, event.username,
+            event.idprovincia, event.idmunicipio, event.calle, event.imagen);
         emit(SignupSuccess(user));
       } catch (e) {
         emit(UserError(message: e.toString()));

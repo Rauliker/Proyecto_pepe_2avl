@@ -1,0 +1,175 @@
+{
+  "@@locale": "ja",
+  "error": "エラー",
+  "appTitleLogin": "ログイン",
+  "emailLabel": "メールアドレス",
+  "passwordLabel": "パスワード",
+  "loginButton": "ログイン",
+  "loginSuccess": "ログイン成功！",
+  "loginFailure": "ログインエラー: {errorMessage}",
+  "signupPrompt": "アカウントをお持ちでない場合は、登録してください",
+  "@loginFailure": {
+    "description": "ログインに失敗した場合に表示されるメッセージ",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "無効な資格情報"
+      }
+    }
+  },
+  "create_user": "ユーザーを作成",
+  "email": "メールアドレス",
+  "username": "ユーザー名",
+  "password": "パスワード",
+  "new_password": "新しいパスワード",
+  "repeat_password": "パスワードを再入力",
+  "province": "都道府県",
+  "municipality": "市町村",
+  "street": "住所",
+  
+  "select_avatar": "アバターを選択",
+  "select_images": "画像を選択",
+  "select_images_error": "最大5枚までの画像を選択できます。",
+  "create_user_button": "ユーザーを作成",
+  "already_have_account": "既にアカウントをお持ちの方はこちらからログイン",
+  "error_empty_password": "パスワードを入力してください。",
+  "error_short_password": "パスワードは6文字以上である必要があります。",
+  "error_passwords_do_not_match": "パスワードが一致しません。",
+  "error_incomplete_fields": "すべてのフィールドを入力してください。",
+  "user_created_success": "ユーザーが正常に作成されました: {email}",
+  "error_create_user": "ユーザー作成エラー: {message}",
+  "@error_create_user": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "error_select_images": "画像選択エラー: {errorMessage}",
+  "@error_select_images": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "search": "名前または説明で検索",
+  "my_Bid": "私のオークション",
+  "error_dialog": "エラー: {errorMessage}",
+  "@error_dialog": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "errorMessage": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "close": "閉じる",
+  "menu": "メニュー",
+  "menu_hello": "こんにちは, {message}",
+  "@menu_hello": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "home": "ホーム",
+  "profile": "プロフィール",
+  "settings": "設定",
+  "logout": "ログアウト",
+  "confirm_logout": "本当にログアウトしますか？",
+  "cancel": "キャンセル",
+  "logout_confirmation": "確認",
+
+  "settings_title": "設定とプライバシー",
+  "change_pass": "パスワードを変更",
+  "profile_update_success": "プロフィールが正常に更新されました",
+  "profile_update": "プロフィールを編集",
+  "change_avatar": "アバターを変更",
+  "wellcome": "こんにちは {username}、以下は利用可能なオークションです:",
+  "@wellcome": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "days_left": "終了まであと {days_left}",
+  "@days_left": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "days_left": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  "winner": "勝者 {winner}",
+  "@winner": {
+    "description": "アカウント作成時に表示されるメッセージ",
+    "placeholders": {
+      "winner": {
+        "type": "String",
+        "example": "pepe"
+      }
+    }
+  },
+  
+  "edit": "編集",
+  "finished": "終了しました",
+  "bids_not_found": "オークションが見つかりません。",
+  "user_load_error": "ユーザーデータの読み込みエラー",
+  "user_not_found": "ユーザーデータが見つかりません",
+
+  "filters": "フィルター",
+  "min_price": "最低価格",
+  "max_price": "最高価格",
+  "apply_filters": "フィルターを適用",
+  "min_price_error": "最低価格は最高価格を超えることはできません",
+  "invalid_price_error": "価格が有効な数字であり、空でないことを確認してください",
+  "min_price_greater_than_max_error": "最低価格は利用可能な最高価格を超えることはできません。",
+  "max_price_less_than_min_error": "最高価格は利用可能な最低価格を下回ることはできません。",
+  "min_price_greater_than_max_price": "最低価格は最高価格を超えることはできません。",
+  "min_price_less_than_min_available": "最低価格は {precioMasBajo} を下回ることはできません。",
+  "max_price_greater_than_max_available": "最高価格は {precioMasAlto} を超えることはできません。",
+
+  "sort": "並び替え",
+  "priceSort": "価格で並び替え",
+  "dateSort": "日付で並び替え",
+  "ascending": "↑",
+  "descending": "↓",
+
+  "hello_bid": "利用可能なオークション: {length}",
+  "bid": "入札",
+
+  "name_label": "名前",
+  "name_label_error": "名前を入力してください",
+  "description_label": "説明",
+  "description_label_error": "説明を入力してください",
+  "sub_peice_initial": "開始価格",
+  "sub_peice_initial_error": "有効な数字を入力してください",
+  "date_end": "終了日",
+  "create_sub": "オークションを作成",
+  "image_error": "少なくとも1枚の画像を選択する必要があります。",
+  "bid_crate_sucess": "オークションが正常に作成されました {email}",
+
+  "bid_update_success": "オークションが正常に更新されました {email}",
+  "bid_delete": "オークションが正常に削除されました {email}",
+
+  "delete": "削除",
+  "edit_bid": "オークションを編集",
+
+  "change_language_title": "言語を変更",
+  "inicio": "ホーム",
+  "delete_auction_quest": "本当にオークションを削除しますか？"
+}

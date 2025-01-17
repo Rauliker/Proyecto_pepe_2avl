@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
@@ -48,10 +49,11 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
     if (_passwordController.text.length < 6 ||
         _repeatPasswordController.text.length < 6) {
       if (_passwordController.text != _repeatPasswordController.text) {
-        ErrorDialog.show(context, 'Las contraseñas deben coincidir.');
+        ErrorDialog.show(context,
+            AppLocalizations.of(context)!.error_passwords_do_not_match);
       } else {
         ErrorDialog.show(
-            context, 'La contraseña debe tener al menos 6 caracteres.');
+            context, AppLocalizations.of(context)!.error_short_password);
       }
       return;
     }
@@ -64,13 +66,15 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cambiar contraseñas')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.change_pass)),
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(listener: (context, userState) {
             if (userState is SignupSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Perfil actualizado con éxito')),
+                SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.profile_update_success)),
               );
               context.go('/home');
             } else if (userState is UserError) {
@@ -94,7 +98,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     return TextField(
                       controller: _passwordController,
                       decoration: InputDecoration(
-                        labelText: 'Contraseña',
+                        labelText: AppLocalizations.of(context)!.new_password,
                         suffixIcon: IconButton(
                           icon: Icon(
                             visible ? Icons.visibility : Icons.visibility_off,
@@ -115,7 +119,8 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     return TextField(
                       controller: _repeatPasswordController,
                       decoration: InputDecoration(
-                        labelText: 'Repetir nueva contraseña',
+                        labelText:
+                            AppLocalizations.of(context)!.repeat_password,
                         suffixIcon: IconButton(
                           icon: Icon(
                             visible ? Icons.visibility : Icons.visibility_off,
@@ -134,7 +139,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                 ElevatedButton(
                   onPressed: _submitForm,
                   child: Text(
-                    'Cambiar contraseña',
+                    AppLocalizations.of(context)!.change_pass,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),

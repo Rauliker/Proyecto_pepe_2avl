@@ -69,25 +69,19 @@ class UserUpdateProfile extends UserEvent {
   final int idprovincia;
   final int idmunicipio;
   final String calle;
-  /*final List<PlatformFile> imagen; */
+  final List<PlatformFile> imagen;
 
-  const UserUpdateProfile({
-    required this.email,
-    required this.username,
-    required this.idprovincia,
-    required this.idmunicipio,
-    required this.calle,
-    /*required this.imagen*/
-  });
+  const UserUpdateProfile(
+      {required this.email,
+      required this.username,
+      required this.idprovincia,
+      required this.idmunicipio,
+      required this.calle,
+      required this.imagen});
 
   @override
-  List<Object?> get props => [
-        email,
-        username,
-        idprovincia,
-        idmunicipio,
-        calle, /*imagen*/
-      ];
+  List<Object?> get props =>
+      [email, username, idprovincia, idmunicipio, calle, imagen];
 }
 
 class UserUpdatePass extends UserEvent {

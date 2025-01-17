@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
@@ -8,7 +9,6 @@ import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
-import 'package:proyecto_raul/presentations/funcionalities/logout.dart';
 import 'package:proyecto_raul/presentations/widgets/drewers.dart';
 import 'package:proyecto_raul/presentations/widgets/filter_drawer.dart';
 import 'package:proyecto_raul/presentations/widgets/sort_drawer.dart';
@@ -41,48 +41,20 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
-    _fetchSubastas();
+    fetchUserData();
+    fetchSubastas();
   }
 
-  Future<void> _showLogoutConfirmationDialog() async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmar'),
-          content: const Text('¿Seguro que quieres cerrar sesión?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text('Cerrar sesión'),
-            ),
-          ],
-        );
-      },
-    );
-    if (result == true) {
-      await logout(context);
-    }
-  }
-
-  Future<void> _fetchUserData() async {
+  Future<void> fetchUserData() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
     if (email != null) {
       context.read<UserBloc>().add(UserDataRequest(email: email));
+      setState(() {});
     }
   }
 
-  Future<void> _fetchSubastas() async {
+  Future<void> fetchSubastas() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
 
@@ -145,7 +117,8 @@ class HomeScreenState extends State<HomeScreen> {
                 onTap: () => Scaffold.of(context).openDrawer(),
                 child: CircleAvatar(
                   backgroundImage: state.user.avatar.isNotEmpty
-                      ? NetworkImage('$_baseUrl${state.user.avatar}')
+                      ? NetworkImage(
+                          '$_baseUrl${state.user.avatar}?timestamp=${DateTime.now().millisecondsSinceEpoch}')
                       : null,
                   child: state.user.avatar.isEmpty
                       ? const Icon(Icons.person, size: 40)
@@ -167,9 +140,9 @@ class HomeScreenState extends State<HomeScreen> {
             child: TextField(
               controller: _searchController,
               onChanged: _filterSubastas,
-              decoration: const InputDecoration(
-                labelText: 'Buscar por nombre o descripción',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.search,
+                border: const OutlineInputBorder(),
               ),
             ),
           ),
@@ -213,12 +186,12 @@ class HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomAppBar(
         child: InkWell(
           onTap: () => context.go('/my_sub'),
-          child: const Padding(
-            padding: EdgeInsets.all(16.0),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Mis pujas',
+              AppLocalizations.of(context)!.my_Bid,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         ),

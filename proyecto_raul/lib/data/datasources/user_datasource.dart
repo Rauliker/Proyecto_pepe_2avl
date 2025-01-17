@@ -15,14 +15,8 @@ abstract class UserRemoteDataSource {
 
   Future<UserModel> createUser(String email, String password, String username,
       int provincia, int municipio, String calle, List<PlatformFile> imagen);
-  Future<UserModel> updateUserProfile(
-    String email,
-    String username,
-    int provincia,
-    int municipio,
-    String calle,
-    /*List<PlatformFile> imagen */
-  );
+  Future<UserModel> updateUserProfile(String email, String username,
+      int provincia, int municipio, String calle, List<PlatformFile> imagen);
 
   Future<UserModel> updateUserPass(String password);
 }
@@ -58,7 +52,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('email', email);
           final json = jsonDecode(response.body);
-          print(json);
+          // print(json);
           return UserModel.fromJson(json);
         } else {
           throw Exception(
@@ -170,10 +164,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     int provincia,
     int municipio,
     String calle,
-    /* List<PlatformFile> image */ // Si se utiliza en el futuro
+    List<PlatformFile> images,
   ) async {
     try {
-      // Obtén el email del usuario almacenado en SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       final userEmail = prefs.getString('email');
       if (userEmail == null) {
@@ -181,31 +174,37 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             'No se encontró el email del usuario en SharedPreferences');
       }
 
-      // Construye la URL de la solicitud
       final url = Uri.parse('$_baseUrl/users/$userEmail');
 
-      // Crea una solicitud Multipart para enviar datos
-      final body = jsonEncode({
-        "email": email,
-        "username": username,
-        "provinciaId": provincia,
-        "localidadId": municipio,
-        "calle": calle
-      });
+      final request = http.MultipartRequest('PUT', url);
 
-      // Envía la solicitud
+      request.fields['email'] = email;
+      request.fields['username'] = username;
+      request.fields['provinciaId'] = provincia.toString();
+      request.fields['localidadId'] = municipio.toString();
+      request.fields['calle'] = calle;
 
-      final headers = {'Content-Type': 'application/json'};
-      final response = await client.put(url, body: body, headers: headers);
+      for (var file in images) {
+        if (file.bytes != null) {
+          request.files.add(
+            http.MultipartFile.fromBytes(
+              'files',
+              file.bytes!,
+              filename: file.name,
+            ),
+          );
+        }
+      }
+      final response = await request.send();
 
-      // Verifica el código de estado de la respuesta
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final jsonResponse = jsonDecode(response.body);
-        return UserModel.fromJson(
-            jsonResponse); // Convierte la respuesta en un modelo de usuario
+        final responseBody = await response.stream.bytesToString();
+        final jsonResponse = jsonDecode(responseBody);
+        return UserModel.fromJson(jsonResponse);
       } else {
+        final responseBody = await response.stream.bytesToString();
         throw Exception(
-            'Error al actualizar el perfil del usuario. Código de estado: ${response.statusCode}. Respuesta: ${response.body}');
+            'Error al actualizar el perfil del usuario. Código de estado: ${response.statusCode}. Respuesta: $responseBody');
       }
     } catch (e) {
       throw Exception(
