@@ -13,3 +13,4 @@ build/
 # Configuración específica del entorno
 .idea/
 .vscode/
+.proyecto_raul\.env
