@@ -16,6 +16,13 @@ abstract class SubastasRepository {
   Future<List<SubastaEntity>> getSubastasPorUsuario(String email);
   Future<SubastaEntity> getSubastaById(int id);
   Future<void> updateSubasta(
-      int id, String nombre, String descripcion, String fechaFin);
-  Future<void> makePuja(int idPuja, String email, String puja);
+      int id,
+      String nombre,
+      String descripcion,
+      String fechaFin,
+      List<String> eliminatedImages,
+      List<PlatformFile> added,
+      String pujaInicial);
+  Future<void> makePuja(int idPuja, String email, String puja, bool isAuto,
+      String incrementController, String maxAutoController);
 }

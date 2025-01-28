@@ -37,6 +37,7 @@ class UserCreateRequest extends UserEvent {
   final int idmunicipio;
   final String calle;
   final List<PlatformFile> imagen;
+  final int role;
 
   const UserCreateRequest(
       {required this.email,
@@ -45,11 +46,20 @@ class UserCreateRequest extends UserEvent {
       required this.idprovincia,
       required this.idmunicipio,
       required this.calle,
-      required this.imagen});
+      required this.imagen,
+      required this.role});
 
   @override
-  List<Object?> get props =>
-      [email, password, username, idprovincia, idmunicipio, calle, imagen];
+  List<Object?> get props => [
+        email,
+        password,
+        username,
+        idprovincia,
+        idmunicipio,
+        calle,
+        imagen,
+        role
+      ];
 }
 
 class UserOtherDataRequest extends UserEvent {
@@ -82,6 +92,19 @@ class UserUpdateProfile extends UserEvent {
   @override
   List<Object?> get props =>
       [email, username, idprovincia, idmunicipio, calle, imagen];
+}
+
+class UserUpdateBan extends UserEvent {
+  final bool banned;
+  final String email;
+
+  const UserUpdateBan({required this.banned, required this.email});
+
+  @override
+  List<Object?> get props => [
+        banned,
+        email,
+      ];
 }
 
 class UserUpdatePass extends UserEvent {

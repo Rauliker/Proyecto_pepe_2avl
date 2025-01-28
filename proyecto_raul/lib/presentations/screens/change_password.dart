@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyecto_raul/presentations/appbars/default_appbar.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
@@ -36,6 +37,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
     if (email != null) {
+      if (!mounted) return;
       context.read<UserBloc>().add(UserDataRequest(email: email));
     }
   }
@@ -66,7 +68,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.change_pass)),
+      appBar: DefaultAppBar(mesage: AppLocalizations.of(context)!.change_pass),
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(listener: (context, userState) {

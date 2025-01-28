@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto_raul/domain/entities/subastas_entities.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubastasRemoteDataSource {
   final String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
@@ -22,7 +23,7 @@ class SubastasRemoteDataSource {
     int i = 0;
     final url = Uri.parse('$baseUrl/pujas');
 
-    final request = http.MultipartRequest('POST', url);
+    final request = http.MultipartRequest('Post', url);
     request.fields['nombre'] = nombre;
     request.fields['descripcion'] = descripcion;
     request.fields['pujaInicial'] = subInicial;
@@ -37,6 +38,7 @@ class SubastasRemoteDataSource {
 
         final fileName = '$creatorId-$nombre-$i$extension';
 
+        i++;
         request.files.add(
           http.MultipartFile.fromBytes(
             'files',
@@ -44,14 +46,14 @@ class SubastasRemoteDataSource {
             filename: fileName,
           ),
         );
-
-        i++;
       }
     }
 
     final response = await request.send();
     if (response.statusCode != 201) {
-      throw Exception('Error al crear la subasta: ${response.statusCode}');
+      final responseBody = await response.stream.bytesToString();
+      throw Exception(
+          'Error al crear la subasta: ${response.statusCode} $responseBody');
     }
   }
 
@@ -119,37 +121,114 @@ class SubastasRemoteDataSource {
   }
 
   /// Actualizar una subasta
-  Future<void> updateSubasta(
-      int id, String nombre, String descripcion, String fechaFin) async {
-    final url = Uri.parse('$baseUrl/pujas/$id');
+  Future<void> eliminarImagenes(int id, List<String> eliminatedImages) async {
+    final url = Uri.parse('$baseUrl/pujas/$id/eliminar-imagenes');
 
-    // Crear el JSON manualmente en lugar de depender de un objeto `subasta`
-    final Map<String, dynamic> subastaData = {
-      'nombre': nombre,
-      'descripcion': descripcion,
-      'fechaFin': fechaFin,
-    };
+    // Crear la solicitud DELETE con las imágenes eliminadas
+    final body = jsonEncode({'eliminatedImages': eliminatedImages});
+    final headers = {'Content-Type': 'application/json'};
 
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(subastaData), // Convertir el mapa en JSON
-    );
+    try {
+      final response = await http.delete(url, headers: headers, body: body);
 
-    if (response.statusCode != 200) {
-      throw Exception('Error al actualizar la subasta: ${response.body}');
+      if (response.statusCode != 200) {
+        throw Exception(
+            'Error al eliminar imágenes de la subasta: ${response.body}');
+      }
+
+      // print('Imágenes eliminadas con éxito: ${response.body}');
+    } catch (e) {
+      throw Exception('No se pudo eliminar las imágenes. Detalles: $e');
     }
   }
 
-  Future<void> makePuja(int idPuja, String email, String puja) async {
-    final url = Uri.parse('$baseUrl/pujas/bid');
+  Future<void> actualizarSubasta(int id, String nombre, String descripcion,
+      String fechaFin, List<PlatformFile> added, String pujaInicial) async {
+    final url = Uri.parse('$baseUrl/pujas/$id');
 
-    // Crear el JSON manualmente en lugar de depender de un objeto `subasta`
+    // Crear la solicitud PUT
+    final request = http.MultipartRequest('PUT', url);
+
+    // Agregar campos al formulario
+    request.fields['nombre'] = nombre;
+    request.fields['descripcion'] = descripcion;
+    request.fields['pujaInicial'] = pujaInicial;
+    request.fields['fechaFin'] =
+        "$fechaFin ${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second} GMT+1";
+
+    // Agregar imágenes nuevas
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email') ?? 'unknown_user';
+    int i = 0;
+
+    for (var file in added) {
+      if (file.bytes != null) {
+        final extension = file.name.contains('.')
+            ? file.name.substring(file.name.lastIndexOf('.'))
+            : '';
+        final fileName = '$email-$nombre-$i$extension';
+        i++;
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'files',
+            file.bytes!,
+            filename: fileName,
+          ),
+        );
+      }
+    }
+
+    // Enviar la solicitud
+    try {
+      final response = await request.send();
+
+      // Leer el cuerpo de la respuesta
+      final responseBody = await response.stream.bytesToString();
+
+      if (response.statusCode != 200) {
+        throw Exception('Error al actualizar la subasta: $responseBody');
+      }
+
+      // print('Subasta actualizada con éxito: $responseBody');
+    } catch (e) {
+      throw Exception('No se pudo actualizar la subasta. Detalles: $e');
+    }
+  }
+
+  Future<void> updateSubasta(
+      int id,
+      String nombre,
+      String descripcion,
+      String fechaFin,
+      List<String> eliminatedImages,
+      List<PlatformFile> added,
+      String pujaInicial) async {
+    // 1. Eliminar imágenes
+    if (eliminatedImages.isNotEmpty) {
+      await eliminarImagenes(id, eliminatedImages);
+    }
+
+    // 2. Actualizar los demás parámetros
+    await actualizarSubasta(
+        id, nombre, descripcion, fechaFin, added, pujaInicial);
+  }
+
+  Future<void> makePuja(int idPuja, String email, String puja, bool isAuto,
+      String incrementController, String maxAutoController) async {
+    final url = Uri.parse('$baseUrl/pujas/bid');
+    DateTime now = DateTime.now();
+
     final Map<String, dynamic> subastaData = {
       "userId": email,
       "email_user": email,
       "pujaId": idPuja,
-      "bidAmount": puja
+      "bidAmount": puja,
+      "is_auto": isAuto,
+      "max_auto_bid":
+          double.tryParse(maxAutoController) ?? 0.0, // Convertir a número
+      "increment":
+          double.tryParse(incrementController) ?? 0.0, // Convertir a número
+      "fecha": now.toIso8601String(),
     };
 
     final response = await http.post(

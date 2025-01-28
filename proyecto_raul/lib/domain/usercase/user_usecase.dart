@@ -25,9 +25,10 @@ class CreateUser {
       int idprovincia,
       int idmunicipio,
       String calle,
+      int role,
       List<PlatformFile> image) async {
-    User userInfo = await repository.createUser(
-        email, password, username, idprovincia, idmunicipio, calle, image);
+    User userInfo = await repository.createUser(email, password, username,
+        idprovincia, idmunicipio, calle, image, role);
     return userInfo;
   }
 }
@@ -63,6 +64,17 @@ class CaseUseUserUpdateProfile {
       int idmunicipio, String calle, List<PlatformFile> image) async {
     User userInfo = await repository.updateUserProfile(
         email, username, idprovincia, idmunicipio, calle, image);
+    return userInfo;
+  }
+}
+
+class CaseUserUpdateBan {
+  final UserRepository repository;
+
+  CaseUserUpdateBan(this.repository);
+
+  Future<User> call(bool banned, String email) async {
+    User userInfo = await repository.changeBan(banned, email);
     return userInfo;
   }
 }

@@ -171,5 +171,11 @@
 
   "change_language_title": "更改语言",
   "inicio": "首页",
-  "delete_auction_quest": "确定要删除此竞拍吗？"
+  "delete_auction_quest": "确定要删除此竞拍吗？",
+  "count_action":"{days} 天, {hours} 时",
+  "ingrese":"输入竞标金额",
+  "add_image":"添加图片",
+  "auto_bid_check": "是否要自动出价？",
+  "auto_bid_cant": "自动出价的金额",
+  "auto_bid_max_cant": "最高价格（可选）"
 }

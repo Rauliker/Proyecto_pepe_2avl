@@ -1,10 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/injection_container.dart' as di;
 import 'package:proyecto_raul/presentations/bloc/language/language_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
+import 'package:proyecto_raul/presentations/bloc/users/ban_user_bloc.dart';
+import 'package:proyecto_raul/presentations/bloc/users/other_user_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
+import 'package:proyecto_raul/presentations/screens/admin_screen.dart';
 import 'package:proyecto_raul/presentations/screens/change_language_screen.dart';
 import 'package:proyecto_raul/presentations/screens/change_password.dart';
 import 'package:proyecto_raul/presentations/screens/crear_sub_form.dart';
@@ -18,6 +22,11 @@ import 'package:proyecto_raul/presentations/screens/spalsh_screen.dart';
 import 'package:proyecto_raul/presentations/screens/user_subastas.dart';
 import 'package:proyecto_raul/presentations/screens/view_sub.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Future<int> _getUserRole() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getInt("role") ?? 2;
+}
 
 final GoRouter router = GoRouter(
   initialLocation: '/splash',
@@ -51,17 +60,35 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/home',
-      builder: (context, state) => MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => di.sl<UserBloc>(),
-          ),
-          BlocProvider(
-            create: (context) => di.sl<SubastasBloc>(),
-          ),
-        ],
-        child: const HomeScreen(),
-      ),
+      builder: (context, state) {
+        return FutureBuilder<int>(
+          future: _getUserRole(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return const Center(child: Text("Error loading role"));
+            }
+            final role = snapshot.data ?? 2;
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => di.sl<UserBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => di.sl<OtherUserBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => di.sl<SubastasBloc>(),
+                ),
+                BlocProvider(create: (context) => di.sl<BanUserBloc>())
+              ],
+              child: role == 2 ? const HomeScreen() : const AdminScreen(),
+            );
+          },
+        );
+      },
     ),
     GoRoute(
       path: '/my_sub',
@@ -126,13 +153,6 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/user',
-      builder: (context, state) => BlocProvider(
-        create: (context) => di.sl<UserBloc>(),
-        child: const HomeScreen(),
-      ),
-    ),
-    GoRoute(
       path: '/profile',
       builder: (context, state) => MultiBlocProvider(
         providers: [
@@ -171,14 +191,20 @@ final GoRouter router = GoRouter(
   redirect: (context, state) async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
+    final role = prefs.getInt('role');
     if (state.matchedLocation == '/splash') {
       if (email != null && email.isNotEmpty) {
         return '/home';
       }
       return '/login';
     }
+
     if (email != null && email.isNotEmpty) {
-      if (state.matchedLocation == '/login' ||
+      if (role == 1 || role == 0) {
+        if (state.matchedLocation == '/signup') {
+          return '/signup';
+        }
+      } else if (state.matchedLocation == '/login' ||
           state.matchedLocation == '/signup') {
         return '/home';
       }

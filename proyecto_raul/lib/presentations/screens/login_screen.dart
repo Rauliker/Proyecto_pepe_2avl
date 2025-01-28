@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyecto_raul/presentations/appbars/default_appbar.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
@@ -20,24 +21,27 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitleLogin)),
+      appBar:
+          DefaultAppBar(mesage: AppLocalizations.of(context)!.appTitleLogin),
       body: BlocConsumer<UserBloc, UserState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginSuccess) {
+            // context
+            //     .read<UserBloc>()
+            //     .add(UserOtherDataRequest(email: state.user.email));
+
+            if (!context.mounted) return;
             context
                 .read<UserBloc>()
                 .add(UserDataRequest(email: state.user.email));
-
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                   content: Text(AppLocalizations.of(context)!.loginSuccess)),
             );
+
+            if (!context.mounted) return;
             context.go('/home');
-            // if (state.user.role == 2) {
-            //   context.go('/user');
-            // } else {
-            //   context.go('/home');
-            // }
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

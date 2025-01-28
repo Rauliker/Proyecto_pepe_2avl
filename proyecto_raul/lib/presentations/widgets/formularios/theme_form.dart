@@ -26,10 +26,13 @@ class ThemeSelector extends StatelessWidget {
     Future<void> navigateUser(BuildContext context) async {
       int userRole = await role();
       if (userRole == 1) {
+        if (!context.mounted) return;
         context.go('/admin');
       } else if (userRole == 2) {
+        if (!context.mounted) return;
         context.go('/tecnico');
       } else if (userRole == 3) {
+        if (!context.mounted) return;
         context.go('/user');
       }
     }

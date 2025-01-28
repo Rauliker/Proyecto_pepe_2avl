@@ -66,9 +66,15 @@ class CaseUpdateSubasta {
   CaseUpdateSubasta(this.subastasRepository);
 
   Future<void> call(
-      int id, String nombre, String decripcion, String fechaFin) async {
+      int id,
+      String nombre,
+      String decripcion,
+      String fechaFin,
+      List<String> eliminatedImages,
+      List<PlatformFile> added,
+      String pujaInicial) async {
     return await subastasRepository.updateSubasta(
-        id, nombre, decripcion, fechaFin);
+        id, nombre, decripcion, fechaFin, eliminatedImages, added, pujaInicial);
   }
 }
 
@@ -87,7 +93,9 @@ class CaseMakePuja {
 
   CaseMakePuja(this.subastasRepository);
 
-  Future<void> call(int idPuja, String email, String puja) async {
-    return await subastasRepository.makePuja(idPuja, email, puja);
+  Future<void> call(int idPuja, String email, String puja, bool isAuto,
+      String incrementController, String maxAutoController) async {
+    return await subastasRepository.makePuja(
+        idPuja, email, puja, isAuto, incrementController, maxAutoController);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:proyecto_raul/domain/entities/subastas_entities.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
@@ -21,8 +23,18 @@ class ViewSubInfo extends StatefulWidget {
 class ViewSubInfoState extends State<ViewSubInfo> {
   late String baseUrl;
   late int currentImageIndex;
-  late double pujaActual;
+  late int pujaActual;
   late TextEditingController pujaController;
+  late bool isAuto = false;
+
+  late TextEditingController incrementController =
+      TextEditingController(text: "0");
+
+  late TextEditingController maxAutoController =
+      TextEditingController(text: "0");
+  String? email;
+
+  bool hasLoaded = false; // Bandera para evitar la ejecución repetida
 
   @override
   void initState() {
@@ -30,30 +42,48 @@ class ViewSubInfoState extends State<ViewSubInfo> {
     baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
     currentImageIndex = 0;
     pujaController = TextEditingController();
-    context.read<SubastasBloc>().add(FetchSubastasPorIdEvent(widget.idSubasta));
+    loadData();
+  }
+
+  void winners(List<Puja>? pujas) async {
+    if (pujas == null || pujas.isEmpty) {
+      isAuto = false;
+    } else {
+      // Encuentra la puja más reciente.
+      final Puja latestPuja =
+          pujas.where((puja) => puja.emailUser == email).first;
+
+      isAuto = latestPuja.isAuto;
+      incrementController =
+          TextEditingController(text: "${latestPuja.increment}");
+      maxAutoController =
+          TextEditingController(text: "${latestPuja.maxAutoBid}");
+    }
   }
 
   void handlePujar() async {
     String puja = pujaController.text;
     if (puja.isNotEmpty) {
-      final prefs = await SharedPreferences.getInstance();
       if (double.parse(puja) > pujaActual) {
-        final email = prefs.getString('email');
-
         if (email != null) {
+          if (!mounted) return;
           context.read<SubastasBloc>().add(CreateSubastaPujaEvent(
-                idPuja: widget.idSubasta,
-                email: email,
-                puja: puja,
-              ));
+              idPuja: widget.idSubasta,
+              email: email!,
+              puja: puja,
+              isAuto: isAuto,
+              incrementController: incrementController.text,
+              maxAutoController: maxAutoController.text));
           // Limpiar el controlador de texto
           pujaController.clear();
         } else {
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('No se encontró el email.')),
           );
         }
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('La puja debe ser mayor a la actual.')),
         );
@@ -65,6 +95,28 @@ class ViewSubInfoState extends State<ViewSubInfo> {
     }
   }
 
+  Future<void> loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    email = prefs.getString('email');
+    if (!mounted) return;
+    context.read<SubastasBloc>().add(FetchSubastasPorIdEvent(widget.idSubasta));
+
+    context.read<SubastasBloc>().stream.listen((state) {
+      if (state is SubastasLoadedStateId) {
+        var pujaData = state.subastas.pujas
+            ?.where((puja) => puja.emailUser == email)
+            .first;
+        if (pujaData != null) {
+          setState(() {
+            isAuto = pujaData.isAuto;
+            incrementController.text = pujaData.increment.toString();
+            maxAutoController.text = pujaData.maxAutoBid.toString();
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +124,11 @@ class ViewSubInfoState extends State<ViewSubInfo> {
         title: BlocBuilder<SubastasBloc, SubastasState>(
           builder: (context, state) {
             if (state is SubastasLoadedStateId) {
+              if (!hasLoaded) {
+                // Solo se ejecuta una vez
+                winners(state.subastas.pujas);
+                hasLoaded = true; // Marcar como cargado
+              }
               return Text(state.subastas.nombre);
             } else if (state is SubastasErrorState) {
               return const Text("Error");
@@ -105,6 +162,7 @@ class ViewSubInfoState extends State<ViewSubInfo> {
             builder: (context, state) {
               if (state is SubastasLoadedStateId) {
                 pujaActual = state.subastas.pujaActual;
+
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,11 +231,49 @@ class ViewSubInfoState extends State<ViewSubInfo> {
                       TextField(
                         controller: pujaController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Ingresa la cantidad a pujar',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.ingrese,
+                          border: const OutlineInputBorder(),
                         ),
                       ),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Checkbox(
+                            value: isAuto,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                isAuto = value ?? false;
+                                print(isAuto);
+                              });
+                            },
+                          ),
+                          Text(AppLocalizations.of(context)!.auto_bid_check),
+                        ],
+                      ),
+                      if (isAuto == true) ...[
+                        const SizedBox(height: 16.0),
+                        TextField(
+                          controller: incrementController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.auto_bid_cant,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        TextField(
+                          controller: maxAutoController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context)!.auto_bid_max_cant,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 16.0),
                       Center(
                         child: ElevatedButton.icon(
@@ -187,7 +283,7 @@ class ViewSubInfoState extends State<ViewSubInfo> {
                             color: Colors.black,
                           ),
                           label: Text(
-                            'Pujar',
+                            AppLocalizations.of(context)!.bid,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           style: ElevatedButton.styleFrom(
@@ -200,8 +296,8 @@ class ViewSubInfoState extends State<ViewSubInfo> {
                   ),
                 );
               } else if (state is SubastasErrorState) {
-                return const Center(
-                  child: Text('Error al cargar la información'),
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.error),
                 );
               }
               return const Center(

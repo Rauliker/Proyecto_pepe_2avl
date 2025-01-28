@@ -21,9 +21,10 @@ class UserRepositoryImpl implements UserRepository {
       int idprovincia,
       int idmunicipio,
       String calle,
-      List<PlatformFile> image) async {
-    return await remoteDataSource.createUser(
-        email, password, username, idprovincia, idmunicipio, calle, image);
+      List<PlatformFile> image,
+      int role) async {
+    return await remoteDataSource.createUser(email, password, username,
+        idprovincia, idmunicipio, calle, image, role);
   }
 
   @override
@@ -50,5 +51,13 @@ class UserRepositoryImpl implements UserRepository {
     return await remoteDataSource.updateUserPass(
       password,
     );
+  }
+
+  @override
+  Future<User> changeBan(
+    bool banned,
+    String email,
+  ) async {
+    return await remoteDataSource.changeBan(banned, email);
   }
 }

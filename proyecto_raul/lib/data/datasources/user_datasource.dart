@@ -13,12 +13,20 @@ abstract class UserRemoteDataSource {
   Future<UserModel> getUserInfo(String email);
   Future<List<UserModel>> getUsersInfo(String email);
 
-  Future<UserModel> createUser(String email, String password, String username,
-      int provincia, int municipio, String calle, List<PlatformFile> imagen);
+  Future<UserModel> createUser(
+      String email,
+      String password,
+      String username,
+      int provincia,
+      int municipio,
+      String calle,
+      List<PlatformFile> imagen,
+      int role);
   Future<UserModel> updateUserProfile(String email, String username,
       int provincia, int municipio, String calle, List<PlatformFile> imagen);
 
   Future<UserModel> updateUserPass(String password);
+  Future<UserModel> changeBan(bool banned, String email);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -53,6 +61,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           await prefs.setString('email', email);
           final json = jsonDecode(response.body);
           // print(json);
+          await prefs.setInt('role', UserModel.fromJson(json).role);
           return UserModel.fromJson(json);
         } else {
           throw Exception(
@@ -77,7 +86,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       int provincia,
       int municipio,
       String calle,
-      List<PlatformFile> image) async {
+      List<PlatformFile> image,
+      int role) async {
     try {
       final url = Uri.parse('$_baseUrl/users');
       final request = http.MultipartRequest('POST', url);
@@ -87,6 +97,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       request.fields['provinciaId'] = provincia.toString();
       request.fields['localidadId'] = municipio.toString();
       request.fields['calle'] = calle;
+      request.fields['role'] = role.toString();
 
       for (var file in image) {
         if (file.bytes != null) {
@@ -209,6 +220,32 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     } catch (e) {
       throw Exception(
           'Error inesperado al actualizar el perfil del usuario: $e');
+    }
+  }
+
+  @override
+  Future<UserModel> changeBan(
+    bool banned,
+    String email,
+  ) async {
+    try {
+      final url = Uri.parse('$_baseUrl/users/$email');
+
+      final body = jsonEncode({"banned": banned});
+
+      final headers = {'Content-Type': 'application/json'};
+      final response = await client.put(url, body: body, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final jsonResponse = jsonDecode(response.body);
+        return UserModel.fromJson(jsonResponse);
+      } else {
+        throw Exception(
+            'Error al actualizar el perfil del usuario. Código de estado: ${response.statusCode}. Respuesta: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception(
+          'Error inesperado al actualizar el cambiar el estado del usuario: $e');
     }
   }
 

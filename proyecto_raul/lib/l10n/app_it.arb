@@ -171,5 +171,11 @@
 
   "change_language_title": "Cambia lingua",
   "inicio": "Inizio",
-  "delete_auction_quest": "Sei sicuro di voler eliminare l'asta?"
+  "delete_auction_quest": "Sei sicuro di voler eliminare l'asta?",
+  "count_action":"{days} giorni, {hours} ore",
+  "ingrese":"Inserisci l'importo da offrire",
+  "add_image":"Aggiungi immagine",
+  "auto_bid_check": "Vuoi fare offerte automaticamente?",
+  "auto_bid_cant": "Importo che verrà offerto automaticamente",
+  "auto_bid_max_cant": "Prezzo massimo (opzionale)"
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyecto_raul/domain/entities/subastas_entities.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
@@ -19,7 +20,7 @@ class SubastasListWidget extends StatefulWidget {
   final bool isDateSortAscending;
 
   const SubastasListWidget({
-    Key? key,
+    super.key,
     required this.searchQuery,
     this.minPrice,
     this.maxPrice,
@@ -27,7 +28,7 @@ class SubastasListWidget extends StatefulWidget {
     required this.isPriceSortAscending,
     required this.isDateSort,
     required this.isDateSortAscending,
-  }) : super(key: key);
+  });
 
   @override
   SubastasListWidgetState createState() => SubastasListWidgetState();
@@ -37,6 +38,17 @@ class SubastasListWidgetState extends State<SubastasListWidget> {
   final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
   bool _isFirstTimeSortedPrice = true;
   bool _isFirstTimeSortedDate = true;
+  String winners(List<Puja>? pujas) {
+    if (pujas == null || pujas.isEmpty) {
+      return '';
+    }
+
+    final Puja latestPuja = pujas.reduce((current, next) {
+      return current.fecha.isAfter(next.fecha) ? current : next;
+    });
+
+    return latestPuja.emailUser;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,11 +239,9 @@ class SubastasListWidgetState extends State<SubastasListWidget> {
                                                 .isBefore(subasta.fechaFin)
                                             ? AppLocalizations.of(context)!
                                                 .days_left(getTimeRemaining(
-                                                    subasta.fechaFin))
+                                                    subasta.fechaFin, context))
                                             : AppLocalizations.of(context)!
-                                                .winner(subasta.pujas?.last
-                                                        .emailUser ??
-                                                    ''),
+                                                .winner(winners(subasta.pujas)),
                                         style: TextStyle(
                                             color: Colors.grey.shade600),
                                       ),
@@ -244,11 +254,13 @@ class SubastasListWidgetState extends State<SubastasListWidget> {
                                                     .getInstance();
                                             final email =
                                                 prefs.getString('email');
+                                            if (!context.mounted) return;
                                             context
                                                 .push(
                                               '/subastas/${subasta.id}',
                                             )
                                                 .then((_) {
+                                              if (!context.mounted) return;
                                               context.read<SubastasBloc>().add(
                                                   FetchSubastasDeOtroUsuarioEvent(
                                                       email!));

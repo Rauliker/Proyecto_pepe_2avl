@@ -78,7 +78,8 @@ class SubastasBloc extends Bloc<SubastasEvent, SubastasState> {
     on<CreateSubastaPujaEvent>((event, emit) async {
       emit(SubastasLoadingState());
       try {
-        await makePuja.call(event.idPuja, event.email, event.puja);
+        await makePuja.call(event.idPuja, event.email, event.puja, event.isAuto,
+            event.incrementController, event.maxAutoController);
         emit(SubastaCreatedPujaState());
       } catch (e) {
         emit(SubastasPujaErrorState(e.toString()));
@@ -89,7 +90,13 @@ class SubastasBloc extends Bloc<SubastasEvent, SubastasState> {
       emit(SubastasLoadingState());
       try {
         await updateSubasta.call(
-            event.id, event.nombre, event.descripcion, event.fechaFin);
+            event.id,
+            event.nombre,
+            event.descripcion,
+            event.fechaFin,
+            event.eliminatedImages,
+            event.added,
+            event.pujaInicial);
         emit(SubastaUpdatedState());
       } catch (e) {
         emit(SubastasErrorState(e.toString()));

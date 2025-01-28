@@ -8,7 +8,7 @@ class SubastaEntity {
   final Creator creator;
   final List<Imagen> imagenes;
   final List<Puja>? pujas;
-  final double pujaActual;
+  final int pujaActual;
 
   SubastaEntity({
     required this.id,
@@ -135,20 +135,31 @@ class Puja {
   final bool iswinner;
   final String amount;
   final String emailUser;
+  final bool isAuto;
+  final int maxAutoBid;
+  final int increment;
+  final DateTime fecha;
 
-  Puja({
-    required this.id,
-    required this.iswinner,
-    required this.amount,
-    required this.emailUser,
-  });
+  Puja(
+      {required this.id,
+      required this.iswinner,
+      required this.amount,
+      required this.emailUser,
+      required this.fecha,
+      required this.isAuto,
+      required this.maxAutoBid,
+      required this.increment});
 
   factory Puja.fromJson(Map<String, dynamic> json) {
     return Puja(
-      id: json['id'],
-      iswinner: json['iswinner'],
-      amount: json['amount'],
-      emailUser: json['email_user'],
+      id: json['id'] as int,
+      iswinner: json['iswinner'] as bool,
+      amount: json['amount'] as String,
+      emailUser: json['email_user'] as String,
+      fecha: DateTime.parse(json['fecha'] as String),
+      isAuto: json['is_auto'] as bool,
+      maxAutoBid: json['max_auto_bid'] as int,
+      increment: json['increment'] as int,
     );
   }
 
@@ -158,6 +169,7 @@ class Puja {
       'iswinner': iswinner,
       'amount': amount,
       'email_user': emailUser,
+      'fecha': fecha.toIso8601String(),
     };
   }
 }

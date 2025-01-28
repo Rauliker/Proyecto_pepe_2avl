@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_raul/domain/entities/provincias.dart';
+import 'package:proyecto_raul/presentations/appbars/default_appbar.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_event.dart';
 import 'package:proyecto_raul/presentations/bloc/provincias/prov_state.dart';
@@ -12,15 +13,16 @@ import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
 import 'package:proyecto_raul/presentations/widgets/dialog/error_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CrearUsuarioPage extends StatefulWidget {
   const CrearUsuarioPage({super.key});
 
   @override
-  State<CrearUsuarioPage> createState() => _CrearUsuarioPageState();
+  State<CrearUsuarioPage> createState() => CrearUsuarioPageState();
 }
 
-class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
+class CrearUsuarioPageState extends State<CrearUsuarioPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
@@ -32,12 +34,22 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
   int? _selectedProvincia;
   int? _selectedMunicipio;
   late List<Prov> _provinciasConMunicipios;
+  int role = 2;
+  int? roleCreator;
+  final List<int> allowedRoles = [1, 0];
 
+  @override
   @override
   void initState() {
     super.initState();
+    initializeData();
+  }
+
+  Future<void> initializeData() async {
     context.read<ProvBloc>().add(const ProvDataRequest());
     _provinciasConMunicipios = [];
+    final prefs = await SharedPreferences.getInstance();
+    roleCreator = prefs.getInt('role') ?? 2;
   }
 
   Future<void> _pickImages() async {
@@ -53,6 +65,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
         });
       }
     } catch (e) {
+      if (!mounted) return;
       ErrorDialog.show(context, 'Error al seleccionar imágenes: $e');
     }
   }
@@ -86,14 +99,15 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
               imagen: _imagenes,
               idprovincia: _selectedProvincia!,
               idmunicipio: _selectedMunicipio!,
-              calle: _calleController.text),
+              calle: _calleController.text,
+              role: role),
         );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.create_user)),
+      appBar: DefaultAppBar(mesage: AppLocalizations.of(context)!.create_user),
       body: MultiBlocListener(
         listeners: [
           BlocListener<UserBloc, UserState>(listener: (context, userState) {
@@ -104,7 +118,19 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                       .user_created_success(userState.user.email)),
                 ),
               );
-              context.go('/login');
+              if (allowedRoles.contains(roleCreator)) {
+                context.go('/home');
+              } else {
+                context.go('/login');
+              }
+            } else if (userState is UserLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return const Center(child: CircularProgressIndicator());
+                },
+              );
             } else if (userState is UserError) {
               ErrorDialog.show(context, userState.message);
             }
@@ -189,6 +215,33 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                     });
                   },
                 ),
+                if (allowedRoles.contains(roleCreator))
+                  DropdownButtonFormField<int>(
+                    value: role,
+                    decoration: const InputDecoration(
+                      labelText: "Seleccona el rol",
+                    ),
+                    items: [
+                      const DropdownMenuItem(
+                        value: 2,
+                        child: Text('User'),
+                      ),
+                      const DropdownMenuItem(
+                        value: 1,
+                        child: Text('Empleado'),
+                      ),
+                      if (role == 0)
+                        const DropdownMenuItem(
+                          value: 0,
+                          child: Text('Admin'),
+                        ),
+                    ],
+                    onChanged: (newRole) {
+                      setState(() {
+                        role = newRole!;
+                      });
+                    },
+                  ),
                 TextField(
                   controller: _calleController,
                   decoration: InputDecoration(
@@ -215,13 +268,14 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   child: Text(AppLocalizations.of(context)!.create_user_button,
                       style: Theme.of(context).textTheme.bodyMedium),
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.go('/login');
-                  },
-                  child:
-                      Text(AppLocalizations.of(context)!.already_have_account),
-                ),
+                if (roleCreator == null && !allowedRoles.contains(roleCreator))
+                  TextButton(
+                    onPressed: () {
+                      context.go('/login');
+                    },
+                    child: Text(
+                        AppLocalizations.of(context)!.already_have_account),
+                  ),
               ],
             ),
           ),

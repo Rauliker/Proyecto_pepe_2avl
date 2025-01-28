@@ -89,7 +89,7 @@ class UserOtherLoading extends UserState {}
 
 // Estado cargado
 class UserOtherLoaded extends UserState {
-  final List<User> users; // Cambiado a lista si es necesario
+  final List<User> users;
 
   const UserOtherLoaded(this.users);
 
@@ -103,6 +103,32 @@ class UserOtherError extends UserState {
 
   const UserOtherError(
       {this.message = "Error desconocido al cargar Userincias."});
+
+  @override
+  List<Object?> get props => [message];
+}
+// Estado inicial
+
+class UserBanBanInitial extends UserState {}
+
+// Estado cargando
+class UserBanBanLoading extends UserState {}
+
+// Estado cargado
+class UserBanBanLoaded extends UserState {
+  final User users;
+
+  const UserBanBanLoaded(this.users);
+
+  @override
+  List<Object?> get props => [users];
+}
+
+// Estado de error
+class UserBanError extends UserState {
+  final String message;
+
+  const UserBanError({required this.message});
 
   @override
   List<Object?> get props => [message];

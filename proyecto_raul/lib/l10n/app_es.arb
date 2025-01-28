@@ -171,5 +171,11 @@
 
   "change_language_title":"Cambiar idioma",
   "inicio":"inicio",
-  "delete_auction_quest":"¿Seguro que eliminar la subasta?"
+  "delete_auction_quest":"¿Seguro que eliminar la subasta?",
+  "count_action":"{days} días, {hours} horas",
+  "ingrese":"Ingresa la cantidad a pujar",
+  "add_image":"Añadir imagen",
+  "auto_bid_check":"¿Queres que puje de manera automatica?",
+  "auto_bid_cant":"Cantidad que automaticamente pujara",
+  "auto_bid_max_cant":"precio maximo (opcional)"
 }

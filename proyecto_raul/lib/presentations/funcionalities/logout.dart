@@ -5,5 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> logout(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('email');
-  context.go('/login');
+  await prefs.remove('role');
+  if (context.mounted) {
+    context.go('/login');
+  }
 }

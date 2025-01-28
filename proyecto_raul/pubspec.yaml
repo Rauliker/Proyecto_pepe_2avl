@@ -52,13 +52,15 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
+
+# flutter_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/splash_screen.png"
+
 flutter_launcher_icons:
   image_path: "assets/splash_screen.png"
-  android:
-    generate: true
-    image_path: "assets/splash_screen.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+  android: "launcher_icon"
   ios: true
   web:
     generate: true

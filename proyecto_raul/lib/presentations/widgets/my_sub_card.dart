@@ -14,7 +14,7 @@ import 'package:proyecto_raul/presentations/funcionalities/date_format.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MySubsBody extends StatefulWidget {
-  const MySubsBody({Key? key}) : super(key: key);
+  const MySubsBody({super.key});
 
   @override
   MySubsBodyState createState() => MySubsBodyState();
@@ -43,13 +43,27 @@ class MySubsBodyState extends State<MySubsBody> {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
     if (email != null) {
+      if (!mounted) return;
       context.read<UserBloc>().add(UserDataRequest(email: email));
     }
+  }
+
+  String winners(List<Puja>? pujas) {
+    if (pujas == null || pujas.isEmpty) {
+      return '';
+    }
+
+    final Puja latestPuja = pujas.reduce((current, next) {
+      return current.fecha.isAfter(next.fecha) ? current : next;
+    });
+
+    return latestPuja.emailUser;
   }
 
   Future<void> _fetchSubastas() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
+    if (!mounted) return;
     context.read<SubastasBloc>().add(FetchSubastasPorUsuarioEvent(email!));
   }
 
@@ -197,14 +211,12 @@ class MySubsBodyState extends State<MySubsBody> {
                                                           context)!
                                                       .days_left(
                                                           getTimeRemaining(
-                                                              subasta.fechaFin))
+                                                              subasta.fechaFin,
+                                                              context))
                                                   : AppLocalizations.of(
                                                           context)!
-                                                      .winner(subasta
-                                                              .pujas
-                                                              ?.last
-                                                              .emailUser ??
-                                                          ''),
+                                                      .winner(winners(
+                                                          subasta.pujas)),
                                               style: TextStyle(
                                                   color: Colors.grey.shade600),
                                             ),

@@ -171,5 +171,11 @@
 
   "change_language_title": "Change Language",
   "inicio": "home",
-  "delete_auction_quest":"Are you sure you want to delete the auction?"
+  "delete_auction_quest":"Are you sure you want to delete the auction?",
+  "count_action":"{days} days, {hours} hours",
+  "ingrese":"Enter the amount to bid",
+  "add_image":"Add Image",
+  "auto_bid_check": "Do you want to bid automatically?",
+  "auto_bid_cant": "Amount that will automatically be bid",
+  "auto_bid_max_cant": "Maximum price (optional)"
 }

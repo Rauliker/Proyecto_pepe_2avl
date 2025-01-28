@@ -6,8 +6,8 @@ void showFiltersDrawer(
     BuildContext context,
     TextEditingController searchController,
     void Function(double? minPrice, double? maxPrice) onFilterApplied,
-    double? precioMasBajo,
-    double? precioMasAlto) {
+    int? precioMasBajo,
+    int? precioMasAlto) {
   final TextEditingController minPriceController = TextEditingController(
     text: precioMasBajo?.toString() ?? '',
   );
@@ -27,7 +27,7 @@ void showFiltersDrawer(
           children: [
             Text(
               AppLocalizations.of(context)!.filters,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextField(

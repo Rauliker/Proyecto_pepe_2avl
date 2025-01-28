@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyecto_raul/presentations/appbars/avatar_appbar.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subasta_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_event.dart';
 import 'package:proyecto_raul/presentations/bloc/subastas/subastas_state.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_bloc.dart';
 import 'package:proyecto_raul/presentations/bloc/users/users_event.dart';
-import 'package:proyecto_raul/presentations/bloc/users/users_state.dart';
 import 'package:proyecto_raul/presentations/widgets/drewers.dart';
 import 'package:proyecto_raul/presentations/widgets/filter_drawer.dart';
 import 'package:proyecto_raul/presentations/widgets/sort_drawer.dart';
@@ -16,14 +15,13 @@ import 'package:proyecto_raul/presentations/widgets/subastas_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   HomeScreenState createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000';
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   double? _minPrice;
@@ -32,8 +30,8 @@ class HomeScreenState extends State<HomeScreen> {
   bool _isDateSort = false;
   bool _isPriceSortAscending = true;
   bool _isDateSortAscending = true;
-  double? precioMasAlto;
-  double? precioMasBajo;
+  int? precioMasAlto;
+  int? precioMasBajo;
 
   bool _isFirstTimeSortedPrice = true;
   bool _isFirstTimeSortedDate = true;
@@ -49,6 +47,7 @@ class HomeScreenState extends State<HomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
     if (email != null) {
+      if (!mounted) return;
       context.read<UserBloc>().add(UserDataRequest(email: email));
       setState(() {});
     }
@@ -59,9 +58,11 @@ class HomeScreenState extends State<HomeScreen> {
     final email = prefs.getString('email');
 
     if (email != null) {
+      if (!mounted) return;
       context.read<SubastasBloc>().add(FetchSubastasDeOtroUsuarioEvent(email));
     }
 
+    if (!mounted) return;
     context.read<SubastasBloc>().stream.listen((state) {
       if (state is SubastasLoadedState) {
         final precios =
@@ -108,31 +109,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BidHub'),
-        leading: BlocBuilder<UserBloc, UserState>(
-          builder: (context, state) {
-            if (state is UserLoaded) {
-              return GestureDetector(
-                onTap: () => Scaffold.of(context).openDrawer(),
-                child: CircleAvatar(
-                  backgroundImage: state.user.avatar.isNotEmpty
-                      ? NetworkImage(
-                          '$_baseUrl${state.user.avatar}?timestamp=${DateTime.now().millisecondsSinceEpoch}')
-                      : null,
-                  child: state.user.avatar.isEmpty
-                      ? const Icon(Icons.person, size: 40)
-                      : null,
-                ),
-              );
-            } else {
-              return const CircleAvatar(
-                child: Icon(Icons.person),
-              );
-            }
-          },
-        ),
-      ),
+      appBar: const AvatarAppBar(),
       body: Column(
         children: [
           Padding(

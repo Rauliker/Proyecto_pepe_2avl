@@ -171,5 +171,11 @@
 
   "change_language_title": "Changer la langue",
   "inicio": "Accueil",
-  "delete_auction_quest": "Êtes-vous sûr de vouloir supprimer l'enchère ?"
+  "delete_auction_quest": "Êtes-vous sûr de vouloir supprimer l'enchère ?",
+  "count_action":"{days} jours, {hours} heures",
+  "ingrese":"Entrez le montant à enchérir",
+  "add_image":"Ajouter une image",
+  "auto_bid_check": "Souhaitez-vous enchérir automatiquement ?",
+  "auto_bid_cant": "Montant qui sera automatiquement enchéri",
+  "auto_bid_max_cant": "Prix maximum (optionnel)"
 }

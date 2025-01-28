@@ -77,6 +77,7 @@ class CustomDrawer extends StatelessWidget {
             onTap: () async {
               final result = await _showLogoutConfirmationDialog(context);
               if (result == true) {
+                if (!context.mounted) return;
                 await logout(context);
               }
             },

@@ -171,5 +171,11 @@
 
   "change_language_title": "言語を変更",
   "inicio": "ホーム",
-  "delete_auction_quest": "本当にオークションを削除しますか？"
+  "delete_auction_quest": "本当にオークションを削除しますか？",
+  "count_action":"{days} 日, {hours} 時間",
+  "ingrese":"入札額を入力してください",
+  "add_image":"画像を追加",
+  "auto_bid_check": "自動入札しますか？",
+  "auto_bid_cant": "自動的に入札される金額",
+  "auto_bid_max_cant": "最大価格（オプション）"
 }

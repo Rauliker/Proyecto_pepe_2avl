@@ -48,12 +48,21 @@ class SubastasRepositoryImpl implements SubastasRepository {
 
   @override
   Future<void> updateSubasta(
-      int id, String nombre, String descripcion, String fechaFin) async {
-    await remoteDataSource.updateSubasta(id, nombre, descripcion, fechaFin);
+      int id,
+      String nombre,
+      String descripcion,
+      String fechaFin,
+      List<String> eliminatedImages,
+      List<PlatformFile> added,
+      String pujaInicial) async {
+    await remoteDataSource.updateSubasta(id, nombre, descripcion, fechaFin,
+        eliminatedImages, added, pujaInicial);
   }
 
   @override
-  Future<void> makePuja(int idPuja, String email, String puja) async {
-    await remoteDataSource.makePuja(idPuja, email, puja);
+  Future<void> makePuja(int idPuja, String email, String puja, bool isAuto,
+      String incrementController, String maxAutoController) async {
+    await remoteDataSource.makePuja(
+        idPuja, email, puja, isAuto, incrementController, maxAutoController);
   }
 }
